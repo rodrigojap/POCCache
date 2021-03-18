@@ -8,5 +8,7 @@ namespace MHCache.Services
         Task SetCacheResponseAsync(string cacheKey, object response, TimeSpan timeTimeLive);
 
         Task<string> GetCachedResponseAsStringAsync(string cacheKey);
+
+        Task RemoveCachedResponseAsync(string cacheKey);
     }
 }
