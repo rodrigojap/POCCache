@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace RedisTEST.Controllers
 {
+    [TypeFilter(typeof(CachedAttribute), Arguments = new object[] { 360 })]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -15,15 +16,14 @@ namespace RedisTEST.Controllers
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };        
+        };
 
         public WeatherForecastController()
-        {            
+        {
         }
 
-        [HttpGet]        
-        [TypeFilter(typeof(CachedAttribute), Arguments = new object[] { 360 })]
-        public ActionResult<IEnumerable<WeatherForecast>> Get()
+        [HttpGet("{id}")]
+        public IActionResult Get([FromRoute]int id)
         {                        
             var rng = new Random();
             var result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -36,6 +36,11 @@ namespace RedisTEST.Controllers
 
             return Ok(result);
         }
-      
+
+        [HttpPost()]
+        public IActionResult Post()
+        {
+            return Created("/WeatherForecast/1",null);
+        }
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MHCache.Extensions;
 
 namespace MHCache.CustomAttribute
 {
@@ -14,6 +15,7 @@ namespace MHCache.CustomAttribute
     {
         private readonly int _timeToLiveSeconds;
         private const int TimeToLiveForThreeDays = 60 * 60 * 24 * 3;
+        private const string AllowedRequestMethod = "GET"; 
 
         public IResponseCacheService ResponseCacheService { get; }
 
@@ -24,32 +26,45 @@ namespace MHCache.CustomAttribute
         {
             _timeToLiveSeconds = timeToLiveSeconds;
             ResponseCacheService = responseCacheService;            
-        }         
+        }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {            
-            var cacheKey = GenerateCacheKeyFromRequest(context.HttpContext.Request);
-            var cachedResponse = await ResponseCacheService.GetCachedResponseAsStringAsync(cacheKey);
+        {
+            var request = context.HttpContext.Request;
 
-            //return cached value
-            if (!string.IsNullOrEmpty(cachedResponse))
-            {              
-                var contentResult = new ContentResult
-                {
-                    Content = cachedResponse,
-                    ContentType = "application/json",
-                    StatusCode = 200
-                };
-                context.Result = contentResult;
-                return;
-            }
-
-            //get the new cache value by the current method, and set on redis database
-            var executedContext = await next();
-
-            if (executedContext.Result is OkObjectResult okObjectResult)
+            if (request.Method.Equals(AllowedRequestMethod, StringComparison.InvariantCultureIgnoreCase))
             {
-                await ResponseCacheService.SetCacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_timeToLiveSeconds));
+                var cacheKey = GenerateCacheKeyFromRequest(request);
+
+                var cachedResponse = await ResponseCacheService.GetCachedResponseAsStringAsync(cacheKey);
+
+                var allkeys = ResponseCacheService.GetAllKeys();
+                var keyOne = ResponseCacheService.GetKeysByPattern("/weatherforecast/");
+
+                //return cached value
+                if (!string.IsNullOrEmpty(cachedResponse))
+                {
+                    var contentResult = new ContentResult
+                    {
+                        Content = cachedResponse,
+                        ContentType = "application/json",
+                        StatusCode = 200
+                    };
+                    context.Result = contentResult;
+                    return;
+                }
+
+                //get the new cache value by the current method, and set on redis database
+                var executedContext = await next();
+
+                if (executedContext.Result is OkObjectResult okObjectResult)
+                {
+                    await ResponseCacheService.SetCacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_timeToLiveSeconds));
+                }
+            }
+            else 
+            {
+                await next();
             }
         }
 
