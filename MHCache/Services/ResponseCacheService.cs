@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
-using StackExchange.Redis;
-using System;
+﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 
 namespace MHCache.Services
 {
@@ -27,8 +27,9 @@ namespace MHCache.Services
                 return;
             }
 
-            var serializedResponse = JsonConvert.SerializeObject(response);
-            
+            var serializedResponse = JsonSerializer.Serialize(response);
+
+
             await _distributedCache.SetStringAsync(cacheKey, serializedResponse, new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = timeTimeLive
@@ -44,8 +45,16 @@ namespace MHCache.Services
         public Task RemoveCachedResponseAsync(string cacheKey) 
         {
             return _distributedCache.RemoveAsync(cacheKey);
-        }   
-        
+        }
 
+        public Task<string> GetAllKeys()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ContainsKey(string key)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

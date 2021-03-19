@@ -17,7 +17,10 @@ namespace MHCache.CustomAttribute
 
         public IResponseCacheService ResponseCacheService { get; }
 
-        public CachedAttribute(IResponseCacheService responseCacheService, int timeToLiveSeconds = TimeToLiveForThreeDays)
+        public CachedAttribute(
+                                IResponseCacheService responseCacheService, 
+                                int timeToLiveSeconds = TimeToLiveForThreeDays
+                              )
         {
             _timeToLiveSeconds = timeToLiveSeconds;
             ResponseCacheService = responseCacheService;            

@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using MHCache.Services;
-using Newtonsoft.Json;
 
 namespace MHCache.Extensions
 {
@@ -16,14 +16,14 @@ namespace MHCache.Extensions
         {
             return cacheService
                     .GetCachedResponseAsStringAsync(cacheKey)
-                    .ContinueWith(o =>  JsonConvert.DeserializeObject<T>( o.Result ));
+                    .ContinueWith(o => JsonSerializer.Deserialize<T>( o.Result ));
         }
 
         public static Task<T> GetCachedResponseAsync<T>(this IResponseCacheService cacheService)
         {
             return cacheService
                    .GetCachedResponseAsStringAsync(typeof(T).FullName)
-                   .ContinueWith(o => JsonConvert.DeserializeObject<T>(o.Result));
+                   .ContinueWith(o => JsonSerializer.Deserialize<T>(o.Result));
         }
     }
 }
