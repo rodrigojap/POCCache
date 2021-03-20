@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using MHCache.Services;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MHCache.Extensions;
+using MHCache.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace MHCache.CustomAttribute
+namespace MHCache.AspNetCore.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class CachedAttribute : ActionFilterAttribute
@@ -37,10 +37,7 @@ namespace MHCache.CustomAttribute
                 var cacheKey = GenerateCacheKeyFromRequest(request);
 
                 var cachedResponse = await ResponseCacheService.GetCachedResponseAsStringAsync(cacheKey);
-
-                var allkeys = ResponseCacheService.GetAllKeys();
-                var keyOne = ResponseCacheService.GetKeysByPattern("/weatherforecast/");
-
+                
                 //return cached value
                 if (!string.IsNullOrEmpty(cachedResponse))
                 {

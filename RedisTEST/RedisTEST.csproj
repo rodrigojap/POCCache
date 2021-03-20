@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MHCache\MHCache.csproj" />
+    <ProjectReference Include="..\MHCache.AspNetCore.Filters\MHCache.AspNetCore.Filters.csproj" />
   </ItemGroup>
 
 

@@ -1,43 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
 namespace MHCache.Services
 {
+    /// <summary>Classe de tratamento de cache no serviço</summary>
     public class ResponseCacheService : IResponseCacheService
     {
         private readonly IDatabase _database;
         private readonly IServer _server;
 
         public ResponseCacheService(IConnectionMultiplexer connectionMultiplexer)
-        {
-            //Database 
+        { 
             _database = connectionMultiplexer.GetDatabase();
 
-            //Server 
             var endpoint = connectionMultiplexer.GetEndPoints()[0];
             _server = connectionMultiplexer.GetServer(endpoint);
-        }        
+        }
 
-        public Task<bool> SetCacheResponseAsync(string cacheKey, object response, TimeSpan timeTimeLive)
+        /// <summary>Indica se a chave indicada existe no redis</summary>
+        /// <param name="cacheKey">Nome da chave de cache</param>
+        public Task<bool> ContainsKey(string cacheKey)
         {
-            if (response == null)
-            {
-                return Task.FromResult(false);
-            }
+            return _database.KeyExistsAsync(new RedisKey(cacheKey));
+        }
 
-            var serializedResponse = JsonSerializer.Serialize(response);
-            
+        /// <summary>Seta um texto em cache no serviço e retorna caso realizado com sucesso</summary>
+        /// <param name="cacheKey">Nome da chave de cache</param>
+        /// <param name="value">Valor em texto a ser cacheado</param>
+        /// <param name="timeTimeLive">Tempo de expiração da cache</param>
+        public Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan timeTimeLive)
+        {            
             return _database.StringSetAsync(
-                                              new RedisKey(cacheKey), 
-                                              serializedResponse,
+                                              new RedisKey(cacheKey),
+                                              value,
                                               timeTimeLive
                                           );
         }
-       
+
+        /// <summary>Obtém a informação de uma cache como texto a partir da chave</summary>
+        /// <param name="cacheKey">Nome da chave de cache</param>
         public async Task<string> GetCachedResponseAsStringAsync(string cacheKey)
         {            
             string cachedResponse = await _database.StringGetAsync(
@@ -47,21 +51,26 @@ namespace MHCache.Services
             return string.IsNullOrEmpty(cachedResponse) ? null : cachedResponse;
         }
 
+        /// <summary>Obtém todas as chaves a partir de um padrão indicado</summary>
+        /// <param name="pattern">Texto de padrão para busca das chaves (Use * para ignorar prefixo ou sufixo)</param>
+        /// <param name="pageSize">Tamanho da página</param>
+        /// <param name="pageOffset">Indice da página</param>
+        public IEnumerable<string> GetKeysByPattern(string pattern, int pageSize = 250, int pageOffset = 0)
+        {
+            var keys = _server
+                         .Keys(pattern: new RedisValue(pattern), pageSize: pageSize, pageOffset: pageOffset)
+                         .ToArray();
+            return keys.Select(key => key.ToString()).ToArray();
+        }
+
+        /// <summary>Remove um item de cache a partir no nome indicado</summary>
+        /// <param name="cacheKey">Nome da chave de cache</param>
         public Task<bool> RemoveCachedResponseAsync(string cacheKey) 
         {
             return _database.KeyDeleteAsync(new RedisKey(cacheKey));
         }
 
-        public IEnumerable<string> GetKeysByPattern(string pattern, int pageSize = 250, int pageOffset = 0)
-        {
-            var keys = _server.Keys(pattern : new RedisValue(pattern), pageSize : pageSize, pageOffset: pageOffset);
-            var keyList = _server.Keys().ToArray();
-            return keyList.Select(key => key.ToString()).ToArray();
-        }
 
-        public Task<bool> ContainsKey(string cacheKey)
-        {
-            return _database.KeyExistsAsync(new RedisKey(cacheKey));
-        }
+        
     }
 }

@@ -1,0 +1,57 @@
+{
+  "MHCache": {
+    "RedisCacheOptions": {
+      "Configuration": "localhost", // todos os configuration options devem ser passado nessa connectionstring 
+      "ConfigurationOptions": {
+        //"EndPoints": "localhost" //somente get
+        //"DefaultVersion": "Version",
+        //"ReconnectRetryPolicy": "IReconnectRetryPolicy",
+        //"Proxy": "Proxy",
+        //"SocketManager": "SocketManager",
+        //"CommandMap": "CommandMap",
+        //"ChannelPrefix": "RedisChannel",
+        //"SslProtocols": "SslProtocols?",
+        //"ResolveDns": false,//"bool",
+        //"PreserveAsyncOrder": "bool",
+        //"HighPrioritySocketThreads": "bool",
+        //"CheckCertificateRevocation": true, "bool",
+        //"UseSsl": "bool",
+        //"AllowAdmin": false,//"bool",
+        //"AbortOnConnectFail": true,//"bool", //true (false on Azure)
+        //"Ssl": false,//"bool",
+        //"Password": "string",
+        //"User": "string",
+        //"ClientName": "DESKTOP-RODRIGO",
+        //"SslHost": "string",
+        //"ServiceName": "string",
+        //"TieBreaker": "string",
+        //"ConfigurationChannel": "string",
+        //"SyncTimeout": 5000,//"int",
+        //"WriteBuffer":  -99,//"int",
+        //"ConfigCheckSeconds": 60, //"int",
+        //"ResponseTimeout": -99, //"int",
+        //"ConnectTimeout": 5000, //"int",
+        //"ConnectRetry": 3, //"int",
+        //"AsyncTimeout": -99, //"int",
+        //"KeepAlive": -1, //"int",
+        //"DefaultDatabase": -1 //"int?"
+      }
+    },
+
+    "FilterCacheConfiguration": {
+      "GeneralTimeToLiveSeconds": 259200, //"int?",
+      "CachedRoutes": [
+        {
+          "CachedRouteName": "WeatherForecast",
+          "TimeToLiveSeconds": 60
+        }
+      ],
+      "CacheRemoveRoutes": [
+        {
+          "CachedRouteName": "WeatherForecast",
+          "PatternRouteName": "*WeatherForecast*"
+        }
+      ]
+    }
+  }
+}

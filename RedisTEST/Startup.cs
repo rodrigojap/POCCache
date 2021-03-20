@@ -1,4 +1,4 @@
-using MHCache.Installation;
+using MHCache.AspNetCore.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,10 +18,15 @@ namespace RedisTEST
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
             //custom cache installation, we can put other parameters if we want
-            services.InstallMHRedisCache("localhost");
+            services.InstallMHRedisCacheFilters(Configuration);
+
+            services
+                .AddControllers(
+                    options => options
+                                .InstallMHRedisCacheFilter()
+                                .InstallMHRedisCacheRemoveFilter()
+                );
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

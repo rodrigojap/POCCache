@@ -1,10 +1,7 @@
-﻿using MHCache.CustomAttribute;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
+using MHCache.AspNetCore.Filters;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RedisTEST.Controllers
 {

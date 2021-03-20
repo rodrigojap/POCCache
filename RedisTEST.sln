@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisTEST", "RedisTEST\RedisTEST.csproj", "{8A377CAE-834E-42F0-89E0-47966C22FA12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedisTEST", "RedisTEST\RedisTEST.csproj", "{8A377CAE-834E-42F0-89E0-47966C22FA12}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - WebAPI", "1 - WebAPI", "{1FDF3229-D0EA-4E35-8B1D-439DE94A1F05}"
 EndProject
@@ -11,7 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - NuggetPackage", "2 - Nu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cache", "Cache", "{144AF774-5ECC-428A-8974-2B105B041537}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MHCache", "MHCache\MHCache.csproj", "{45B26534-AB67-403F-89E6-167C53AC8FC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MHCache", "MHCache\MHCache.csproj", "{45B26534-AB67-403F-89E6-167C53AC8FC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MHCache.AspNetCore.Filters", "MHCache.AspNetCore.Filters\MHCache.AspNetCore.Filters.csproj", "{D4BEBE84-39C0-4656-9531-0A82F882706D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{45B26534-AB67-403F-89E6-167C53AC8FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45B26534-AB67-403F-89E6-167C53AC8FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45B26534-AB67-403F-89E6-167C53AC8FC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4BEBE84-39C0-4656-9531-0A82F882706D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4BEBE84-39C0-4656-9531-0A82F882706D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4BEBE84-39C0-4656-9531-0A82F882706D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4BEBE84-39C0-4656-9531-0A82F882706D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -35,6 +41,7 @@ Global
 		{8A377CAE-834E-42F0-89E0-47966C22FA12} = {1FDF3229-D0EA-4E35-8B1D-439DE94A1F05}
 		{144AF774-5ECC-428A-8974-2B105B041537} = {DB28C9B9-20AF-43BD-82FF-1EF30AB0BA98}
 		{45B26534-AB67-403F-89E6-167C53AC8FC2} = {144AF774-5ECC-428A-8974-2B105B041537}
+		{D4BEBE84-39C0-4656-9531-0A82F882706D} = {144AF774-5ECC-428A-8974-2B105B041537}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0F162F89-B599-4A0C-96D9-F8F02C81B066}
