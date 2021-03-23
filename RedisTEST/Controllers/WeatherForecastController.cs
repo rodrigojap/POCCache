@@ -33,10 +33,10 @@ namespace RedisTEST.Controllers
 
 
         [HttpPut("{userId}")]
-        public async Task<IActionResult> InvalidateCacheByUser([FromRoute] int userId)
+        public async Task<IActionResult> UpdateUser([FromRoute] int userId)
         {            
-            //chamar via rabbit após atualização da entidade
-            await _weatherForecastService.InvalidateCachePattern(userId.ToString());
+            //service to update user or it could be a rabbitMQ event
+            await _weatherForecastService.UpdateUser(userId);
 
             return Ok();
         }

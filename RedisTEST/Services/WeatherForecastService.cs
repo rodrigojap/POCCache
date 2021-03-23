@@ -20,10 +20,14 @@ namespace RedisTEST.Services
         {
             _responseCacheService = responseCacheService;
         }
-
-        public async Task<bool> InvalidateCachePattern(string pattern)
+      
+        public async Task<bool> UpdateUser(int userId)
         {
-            await _responseCacheService.RemoveAllByUserPattern(pattern);
+            //SERVICE TO UPDATE USER
+            //await repository.UpdateUser(userId);
+
+            //REMOVE CACHE
+            await _responseCacheService.RemoveAllByPattern($"{userId}:*");
 
             return true;
         }
@@ -67,6 +71,6 @@ namespace RedisTEST.Services
             var rng = new Random();
             var id = rng.Next(1000, 1005);
             return id;
-        }
+        }      
     }
 }

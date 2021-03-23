@@ -77,9 +77,9 @@ namespace MHCache.Services
         /// <returns></returns>
         public Task<long> RemoveAllByPattern(string pattern)
         {
-            var keys = _server.Keys(pattern: pattern)
-                              .ToArray();
-            
+            var keys = _server.Keys(pattern: pattern, pageSize: int.MaxValue, pageOffset: 0)
+                              .ToArray();                      
+
             return _database.KeyDeleteAsync(keys);
         }
     }

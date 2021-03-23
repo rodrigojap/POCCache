@@ -74,34 +74,6 @@ namespace MHCache.Extensions
                                                         int pageSize = 250,
                                                         int pageOffset = 0
                                                     )
-            => cacheService.GetKeysByPattern("*", pageSize, pageOffset);
-
-        /// <summary>Remove todas as chaves a partir de um padrão</summary>
-        /// <param name="cacheService">Serviço de cache</param>
-        /// <param name="pattern">Texto de padrão para busca das chaves (Use * para ignorar prefixo ou sufixo)</param>
-        public static Task RemoveAllByPattern(
-                                                this IResponseCacheService cacheService,
-                                                string pattern = "*"
-                                             ) 
-        {
-            var keys = cacheService.GetKeysByPattern(pattern, int.MaxValue, 0);
-            
-            return Task
-                    .WhenAll(
-                        keys.Select(key => cacheService.RemoveCachedResponseAsync(key))
-                    );                   
-        }        
-        
-        /// <summary>
-        /// Remove todo o cache do usuário
-        /// </summary>
-        /// <param name="cacheService"></param>
-        /// <param name="userPattern">Deve ser o identificador único do usuário, será adicionado ':'</param>
-        /// <returns></returns>
-        public static Task RemoveAllByUserPattern(this IResponseCacheService cacheService,
-                                                  string userPattern)
-        {
-            return cacheService.RemoveAllByPattern($"{userPattern}:*");
-        }
+            => cacheService.GetKeysByPattern("*", pageSize, pageOffset);               
     }
 }

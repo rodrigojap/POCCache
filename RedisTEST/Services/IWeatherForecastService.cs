@@ -8,6 +8,6 @@ namespace RedisTEST.Services
 
         Task<WeatherForecast> GetWeatherForecastById(int id);
 
-        Task<bool> InvalidateCachePattern(string pattern);
+        Task<bool> UpdateUser(int userId);
     }
 }
