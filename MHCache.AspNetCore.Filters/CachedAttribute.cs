@@ -17,7 +17,7 @@ namespace MHCache.AspNetCore.Filters
         private const int TimeToLiveForThreeDays = 60 * 60 * 24 * 3;
         private const string AllowedRequestMethod = "GET"; 
 
-        public IResponseCacheService ResponseCacheService { get; }
+        private IResponseCacheService ResponseCacheService { get; }
 
         public CachedAttribute(
                                 IResponseCacheService responseCacheService, 

@@ -1,3 +1,4 @@
+using AspectCore.Extensions.DependencyInjection;
 using MHCache.AspNetCore.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,9 +21,10 @@ namespace RedisTEST
         public void ConfigureServices(IServiceCollection services)
         {
             //custom cache installation, we can put other parameters if we want
-            services.InstallMHRedisCacheFilters(Configuration);
             services.AddScoped<IWeatherForecastService, WeatherForecastService>();
-
+            services.InstallMHRedisCacheFilters(Configuration);
+            services.InstallRedisAOPCacheFilter(typeof(IWeatherForecastService));
+            
             services.AddControllers();
             //services
             //    .AddControllers(

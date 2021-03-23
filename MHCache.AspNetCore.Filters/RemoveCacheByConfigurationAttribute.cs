@@ -14,8 +14,7 @@ namespace MHCache.AspNetCore.Filters
     public class RemoveCacheByConfigurationAttribute : ActionFilterAttribute
     {
         private static readonly string[] AllowedRequestMethod = { "POST", "PUT", "PATCH", "DELETE" };
-
-        private readonly int _timeToLiveSeconds;        
+       
         private readonly IEnumerable<RouteCacheRemoveConfiguration> _removeCacheRoutes;
 
         public IResponseCacheService ResponseCacheService { get; }

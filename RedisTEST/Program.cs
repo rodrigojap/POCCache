@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using AspectCore.Extensions.Hosting;
 
 namespace RedisTEST
 {
@@ -25,6 +26,7 @@ namespace RedisTEST
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+                .UseDynamicProxy();
     }
 }
