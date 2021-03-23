@@ -20,7 +20,7 @@ namespace MHCache.Extensions
                                                     this IResponseCacheService cacheService,
                                                     string cacheKey,
                                                     TValue objectValue,
-                                                    TimeSpan timeTimeLive
+                                                    TimeSpan? timeTimeLive
                                                 )
         {
             if (objectValue == null)
@@ -40,7 +40,7 @@ namespace MHCache.Extensions
         public static Task SetCacheResponseAsync<TValue>(
                                                     this IResponseCacheService cacheService, 
                                                     TValue objectValue, 
-                                                    TimeSpan timeTimeLive
+                                                    TimeSpan? timeTimeLive
                                                 )
             => cacheService
                     .SetCacheResponseAsync(typeof(TValue).FullName, objectValue, timeTimeLive);
@@ -84,11 +84,24 @@ namespace MHCache.Extensions
                                                 string pattern = "*"
                                              ) 
         {
-            var keys = cacheService.GetKeysByPattern("*", int.MaxValue, 0);
+            var keys = cacheService.GetKeysByPattern(pattern, int.MaxValue, 0);
+            
             return Task
                     .WhenAll(
                         keys.Select(key => cacheService.RemoveCachedResponseAsync(key))
                     );                   
-        }      
+        }        
+        
+        /// <summary>
+        /// Remove todo o cache do usuário
+        /// </summary>
+        /// <param name="cacheService"></param>
+        /// <param name="userPattern">Deve ser o identificador único do usuário, será adicionado ':'</param>
+        /// <returns></returns>
+        public static Task RemoveAllByUserPattern(this IResponseCacheService cacheService,
+                                                  string userPattern)
+        {
+            return cacheService.RemoveAllByPattern($"{userPattern}:*");
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace MHCache.Services
         /// <param name="cacheKey">Nome da chave de cache</param>
         /// <param name="value">Valor em texto a ser cacheado</param>
         /// <param name="timeTimeLive">Tempo de expiração da cache</param>
-        Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan timeTimeLive);
+        Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan? timeTimeLive);
 
         /// <summary>Obtém a informação de uma cache como texto a partir da chave</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
@@ -30,5 +30,12 @@ namespace MHCache.Services
         /// <summary>Remove um item de cache a partir no nome indicado</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
         Task<bool> RemoveCachedResponseAsync(string cacheKey);
+
+        /// <summary>
+        /// Remove todos os itens contidos no padrão
+        /// </summary>
+        /// <param name="pattern">Todos os iteque cont</param>
+        /// <returns></returns>
+        Task<long> RemoveAllByPattern(string pattern);
     }
 }

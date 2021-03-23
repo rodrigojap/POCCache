@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RedisTEST.Services;
 
 namespace RedisTEST
 {
@@ -20,13 +21,15 @@ namespace RedisTEST
         {
             //custom cache installation, we can put other parameters if we want
             services.InstallMHRedisCacheFilters(Configuration);
+            services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
-            services
-                .AddControllers(
-                    options => options
-                                .InstallMHRedisCacheFilter()
-                                .InstallMHRedisCacheRemoveFilter()
-                );
+            services.AddControllers();
+            //services
+            //    .AddControllers(
+            //        options => options
+            //                    .InstallMHRedisCacheFilter()
+            //                    .InstallMHRedisCacheRemoveFilter()
+            //    );
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -9,19 +9,20 @@ namespace MHCache.Extensions
         public static async Task<T> CacheResponseMethodAsync<T>(
                                                                     this IResponseCacheService cacheService, 
                                                                     string keyName, 
-                                                                    TimeSpan timeSpan, 
+                                                                    TimeSpan? timeSpan, 
                                                                     Func<T> func
                                 
                                                                ) 
         {
-            var result = await cacheService.GetCachedResponseAsync<T>(keyName);
-
-            if (result != null)
+            if (await cacheService.ContainsKey(keyName))
             {
-                result = func.Invoke();
-                await cacheService.SetCacheResponseAsync(keyName, result, timeSpan);                
+                return await cacheService.GetCachedResponseAsync<T>(keyName);
             }
-            
+
+            var result = func.Invoke();
+
+            await cacheService.SetCacheResponseAsync(keyName, result, timeSpan);
+
             return result;
         }     
     }

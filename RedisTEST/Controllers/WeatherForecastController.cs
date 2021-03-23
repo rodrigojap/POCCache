@@ -1,43 +1,44 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MHCache.AspNetCore.Filters;
 using Microsoft.AspNetCore.Mvc;
+using RedisTEST.Services;
 
 namespace RedisTEST.Controllers
 {
-    [TypeFilter(typeof(CachedAttribute), Arguments = new object[] { 360 })]
+    //[TypeFilter(typeof(CachedAttribute), Arguments = new object[] { 360 })]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly IWeatherForecastService _weatherForecastService;
 
-        public WeatherForecastController()
+        public WeatherForecastController(IWeatherForecastService weatherForecastService)
         {
+            _weatherForecastService = weatherForecastService;
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get([FromRoute]int id)
-        {                        
-            var rng = new Random();
-            var result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
-
-            return Ok(result);
+        [HttpGet()]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await _weatherForecastService.GetWeatherForecasts());
         }
 
-        [HttpPost()]
-        public IActionResult Post()
+        [HttpGet("{id}")]        
+        public async Task<IActionResult> Get([FromRoute] int id)
         {
-            return Created("/WeatherForecast/1",null);
+            return Ok(await _weatherForecastService.GetWeatherForecastById(id));
+        }
+
+
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> InvalidateCacheByUser([FromRoute] int userId)
+        {            
+            //chamar via rabbit após atualização da entidade
+            await _weatherForecastService.InvalidateCachePattern(userId.ToString());
+
+            return Ok();
         }
     }
 }

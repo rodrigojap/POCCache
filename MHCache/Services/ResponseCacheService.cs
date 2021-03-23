@@ -31,7 +31,7 @@ namespace MHCache.Services
         /// <param name="cacheKey">Nome da chave de cache</param>
         /// <param name="value">Valor em texto a ser cacheado</param>
         /// <param name="timeTimeLive">Tempo de expiração da cache</param>
-        public Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan timeTimeLive)
+        public Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan? timeTimeLive)
         {            
             return _database.StringSetAsync(
                                               new RedisKey(cacheKey),
@@ -70,7 +70,17 @@ namespace MHCache.Services
             return _database.KeyDeleteAsync(new RedisKey(cacheKey));
         }
 
-
-        
+        /// <summary>
+        /// Remove todos os itens contidos no padrão
+        /// </summary>
+        /// <param name="pattern">Todos os iteque cont</param>
+        /// <returns></returns>
+        public Task<long> RemoveAllByPattern(string pattern)
+        {
+            var keys = _server.Keys(pattern: pattern)
+                              .ToArray();
+            
+            return _database.KeyDeleteAsync(keys);
+        }
     }
 }
