@@ -51,6 +51,18 @@
           "CachedRouteName": "WeatherForecast",
           "PatternRouteName": "*WeatherForecast*"
         }
+      ],
+      "CachedMethods": [
+        {
+          "CachedMethodName": "WeatherForecast",
+          "TimeToLiveSeconds": 60
+        }
+      ],
+      "CacheRemoveMethods": [
+        {
+          "CachedMethodName": "WeatherForecast",
+          "PatternMethodCachedName": "*WeatherForecast*"
+        }
       ]
     }
   }

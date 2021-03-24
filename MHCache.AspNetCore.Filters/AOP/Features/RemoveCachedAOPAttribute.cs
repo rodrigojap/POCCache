@@ -28,7 +28,8 @@ namespace MHCache.AspNetCore.Filters.MVC.Extensions
             }
 
             await next(context);
-                                    
+
+            ResponseCacheService = context.ServiceProvider.GetService<IResponseCacheService>();
             await ResponseCacheService
                     .RemoveAllByPattern(RemovePattern);
             
