@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MHCache.AspNetCore.Filters.AOP.DataModel
+namespace MHCache.AspNetCore.Filters.MVC.DataModel
 {
     /// <summary>Dados de Configuração de cache no filtro</summary>
     public class FilterCacheConfiguration

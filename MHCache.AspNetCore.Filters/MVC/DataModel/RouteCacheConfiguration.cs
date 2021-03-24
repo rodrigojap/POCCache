@@ -1,4 +1,4 @@
-﻿namespace MHCache.AspNetCore.Filters.AOP.DataModel
+﻿namespace MHCache.AspNetCore.Filters.MVC.DataModel
 {
     public class RouteCacheConfiguration
     {

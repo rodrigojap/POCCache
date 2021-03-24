@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspectCore.DynamicProxy;
 using MHCache.AspNetCore.Filters.AOP.DataModel;
+using MHCache.AspNetCore.Filters.AOP.Extensions;
 using MHCache.Extensions;
 using MHCache.Services;
 using Microsoft.Extensions.DependencyInjection;

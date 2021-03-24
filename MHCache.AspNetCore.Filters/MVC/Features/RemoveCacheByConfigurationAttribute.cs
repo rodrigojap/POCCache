@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MHCache.AspNetCore.Filters.AOP.DataModel;
+using MHCache.AspNetCore.Filters.MVC.DataModel;
 using MHCache.Extensions;
 using MHCache.Services;
 using Microsoft.AspNetCore.Mvc.Filters;
