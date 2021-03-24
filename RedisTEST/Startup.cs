@@ -23,8 +23,8 @@ namespace RedisTEST
             //custom cache installation, we can put other parameters if we want
             services.AddScoped<IWeatherForecastService, WeatherForecastService>();
             services.InstallMHRedisCacheFilters(Configuration);
-            services.InstallRedisAOPCacheFilter(typeof(IWeatherForecastService));
-            
+            //services.InstallRedisAOPCacheFilter(typeof(IWeatherForecastService));
+                           
             services.AddControllers();
             //services
             //    .AddControllers(

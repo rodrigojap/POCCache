@@ -32,24 +32,14 @@ namespace RedisTEST.Services
             return true;
         }
 
-        public async Task<WeatherForecast[]> GetWeatherForecasts()
+        public Task<WeatherForecast[]> GetWeatherForecasts()
         {
-                                                                             //SPECIFIC ID:NAMESPACE:Method
-            var result = await _responseCacheService.CacheResponseMethodAsync($"{GenerateRandomUserId()}:{_fullNameClass}:GetWeatherForecasts",
-                                                                               null,
-                                                                               () => GetWheater());
-
-            return result;
+            return Task.FromResult(GetWheater());
         }
 
-        public async Task<WeatherForecast> GetWeatherForecastById(int id)
+        public Task<WeatherForecast> GetWeatherForecastById(int id)
         {
-                                                                              //SPECIFIC ID:NAMESPACE:Method:Param
-            var result = await _responseCacheService.CacheResponseMethodAsync($"{GenerateRandomUserId()}:{_fullNameClass}:GetWeatherForecastById:{id}",
-                                                                                null,
-                                                                                () => GetWheater().FirstOrDefault());
-
-            return result;
+            return Task.FromResult(GetWheater().FirstOrDefault());
         }
 
         private WeatherForecast[] GetWheater()

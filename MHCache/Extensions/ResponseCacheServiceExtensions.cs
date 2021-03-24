@@ -48,22 +48,47 @@ namespace MHCache.Extensions
         /// <summary>Obtém o valor de uma cache a partir da chave indicada</summary>
         /// <typeparam name="TValue">O tipo do objeto a ser inserido</typeparam>
         /// <param name="cacheService">Serviço de cache</param>
-        /// <param name="cacheKey">Nome da chave de cache</param>
-        public static Task<TValue> GetCachedResponseAsync<TValue>(
-                                                                     this IResponseCacheService cacheService, 
-                                                                     string cacheKey
-                                                                 )
-            => cacheService
-                    .GetCachedResponseAsStringAsync(cacheKey)
-                    .ContinueWith(o => JsonSerializer.Deserialize<TValue>(o.Result));
+        public static Task<TValue> GetCachedResponseAsync<TValue>(this IResponseCacheService cacheService) where TValue : class
+             => cacheService
+                   .GetCachedResponseAsStringAsync(typeof(TValue).FullName)
+                   .ContinueWith(o =>
+                   {
+                       if (string.IsNullOrWhiteSpace(o.Result)) return null;
+                       return JsonSerializer.Deserialize<TValue>(o.Result);
+                   });
 
         /// <summary>Obtém o valor de uma cache a partir da chave indicada</summary>
         /// <typeparam name="TValue">O tipo do objeto a ser inserido</typeparam>
         /// <param name="cacheService">Serviço de cache</param>
-        public static Task<T> GetCachedResponseAsync<T>(this IResponseCacheService cacheService)
-             => cacheService
-                   .GetCachedResponseAsStringAsync(typeof(T).FullName)
-                   .ContinueWith(o => JsonSerializer.Deserialize<T>(o.Result));
+        /// <param name="cacheKey">Nome da chave de cache</param>
+        public static Task<TValue> GetCachedResponseAsync<TValue>(
+                                                                     this IResponseCacheService cacheService, 
+                                                                     string cacheKey
+                                                                 ) where TValue : class
+            => cacheService
+                    .GetCachedResponseAsStringAsync(cacheKey)
+                    .ContinueWith(o => 
+                    {
+                        if (string.IsNullOrWhiteSpace(o.Result)) return null;
+                        return JsonSerializer.Deserialize<TValue>(o.Result);
+                    });
+
+        /// <summary>Obtém o valor de uma cache a partir da chave indicada</summary>
+        /// <param name="cacheService">Serviço de cache</param>
+        /// <param name="cacheKey">Nome da chave de cache</param>
+        /// <param name="returnType">Tipo de retorno</param>
+        public static Task<object> GetCachedResponseAsync(
+                                                            this IResponseCacheService cacheService,
+                                                            string cacheKey,
+                                                            Type returnType
+                                                         )
+            => cacheService
+                    .GetCachedResponseAsStringAsync(cacheKey)
+                    .ContinueWith(o => 
+                    {
+                        if (string.IsNullOrWhiteSpace(o.Result)) return null;
+                        return JsonSerializer.Deserialize(o.Result, returnType);
+                    });
 
         /// <summary>Obtém todas a chaves do redis paginadas</summary>
         /// <param name="cacheService">Serviço de cache</param>

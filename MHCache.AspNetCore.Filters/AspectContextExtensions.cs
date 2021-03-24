@@ -10,13 +10,14 @@ namespace MHCache.AspNetCore.Filters
     {
         public static string GetGenerateKeyByMethodNameAndValues(this AspectContext context)
         {            
-            var parameters = context.ProxyMethod.GetParameters().Select((o,index) => {
-                return new
+            var parameters = context.ProxyMethod
+                .GetParameters()
+                .Select((o,index) => 
+                new
                 {
                     o.Name,
                     Value = context.Parameters[index]
-                };
-            });
+                });
 
             return JsonSerializer
                 .Serialize(
@@ -28,19 +29,17 @@ namespace MHCache.AspNetCore.Filters
                 );
         }
 
-        public static void SetReturnType(this AspectContext context, Type methodReturnType, Type returnType, object value)
+        public static void SetReturnType(this AspectContext context, Type methodReturnType, object value)
         {
             if (context.IsAsync())
             {
-                //Determine whether it is a task or a valuetask
+                var returnType = methodReturnType.GenericTypeArguments.FirstOrDefault();
                 if (methodReturnType == typeof(Task<>).MakeGenericType(returnType))
                 {
-                    //Reflection gets the return value of task < > type, which is equivalent to Task.FromResult (value)
                     context.ReturnValue = typeof(Task).GetMethod(nameof(Task.FromResult)).MakeGenericMethod(returnType).Invoke(null, new[] { value });
                 }
                 else if (methodReturnType == typeof(ValueTask<>).MakeGenericType(returnType))
                 {
-                    //Reflection builds the return value of valuetask < > type, which is equivalent to new valuetask (value)
                     context.ReturnValue = Activator.CreateInstance(typeof(ValueTask<>).MakeGenericType(returnType), value);
                 }
             }
@@ -50,11 +49,13 @@ namespace MHCache.AspNetCore.Filters
             }
         }
 
-        public async static Task<object> GetReturnType(this AspectContext context)
+        public async static Task<object> GetReturnValueAsync(this AspectContext context)
             => context.IsAsync() ?
                   await context.UnwrapAsyncReturnValue() : 
                   context.ReturnValue;
 
+        public static bool HasAttributeType(this AspectContext context, Type attributeType)
+            => context.ProxyMethod.GetCustomAttributes(attributeType, true).Length == 0;
 
     }
 }

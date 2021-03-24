@@ -1,83 +1,67 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using AspectCore.DynamicProxy;
 using MHCache.Extensions;
 using MHCache.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MHCache.AspNetCore.Filters
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class CachedAOPAttribute : AbstractInterceptorAttribute
     {
         
         private const int TimeToLiveForThreeDays = 60 * 60 * 24 * 3;
 
-        private int TimeToLiveSeconds { get; }      
-        private string CacheName { get; set; }
-        public IResponseCacheService ResponseCacheService { get; set; }
+        public int TimeToLiveSeconds { get; set; } = TimeToLiveForThreeDays;
+        public string CacheName { get; set; }
 
-        public CachedAOPAttribute(
-                                    //IResponseCacheService responseCacheService = null//,
-                                    //string cacheName = null,
-                                    //int timeToLiveSeconds = TimeToLiveForThreeDays
-                                 )
+        private IResponseCacheService ResponseCacheService { get; set; }
+
+        public CachedAOPAttribute()
         {
-            //ResponseCacheService = responseCacheService;
-            //TimeToLiveSeconds = timeToLiveSeconds;
-            //CacheName = cacheName;
         }
 
         public async override Task Invoke(AspectContext context, AspectDelegate next)
         {
-            var key = context.GetGenerateKeyByMethodNameAndValues();
-                        
-            //Determine whether it is an asynchronous method
-            bool isAsync = context.IsAsync();
+            if (string.IsNullOrWhiteSpace(CacheName)) 
+            {
+                CacheName = context.GetGenerateKeyByMethodNameAndValues();
+            }            
 
-            //First judge whether the method has a return value, and if not, do not make cache judgment|| method hasn't annotation
             var methodReturnType = context.ProxyMethod.ReturnType;
             if (
+                    context.HasAttributeType(GetType()) ||
                     methodReturnType == typeof(void) || 
                     methodReturnType == typeof(Task) || 
-                    methodReturnType == typeof(ValueTask) ||
-                    context.ProxyMethod.GetCustomAttributes(GetType(), true).Length == 0
+                    methodReturnType == typeof(ValueTask)
                )
             {
                 await next(context);
                 return;
             }
 
-            var returnType = methodReturnType;
-            if (isAsync)
-            {
-                //Gets the type of the asynchronous return
-                returnType = returnType.GenericTypeArguments.FirstOrDefault();
-            }
+            ResponseCacheService = context.ServiceProvider.GetService<IResponseCacheService>();
+
+            var returnType = context.IsAsync() ? methodReturnType.GenericTypeArguments.FirstOrDefault() : methodReturnType;
            
-            //var cache = context.ServiceProvider.GetService();
+            var cachedValue = await ResponseCacheService.GetCachedResponseAsync(CacheName, returnType);
 
-            var cachedValue = await ResponseCacheService.GetCachedResponseAsStringAsync(key);
-
-            if (string.IsNullOrWhiteSpace(cachedValue))
-            {   
-                var value = await JsonSerializer
-                                    .DeserializeAsync(
-                                        new MemoryStream(Encoding.UTF8.GetBytes(cachedValue)),
-                                        returnType
-                                    );
-
-                context.SetReturnType(methodReturnType, returnType, value);
-
+            if (cachedValue != null)
+            {
+                context.SetReturnType(methodReturnType, cachedValue);
                 return;
             }
 
             await next(context);
-            
-            await ResponseCacheService.SetCacheResponseAsync(key, context.GetReturnType(), TimeSpan.FromSeconds(TimeToLiveSeconds));
+                                    
+            await ResponseCacheService
+                    .SetCacheResponseAsync(
+                                            CacheName, 
+                                            await context.GetReturnValueAsync(), 
+                                            TimeSpan.FromSeconds(TimeToLiveSeconds)
+                                          );
             
         }
     }
