@@ -6,7 +6,7 @@ using MHCache.Extensions;
 using MHCache.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MHCache.AspNetCore.Filters.MVC.Extensions
+namespace MHCache.AspNetCore.Filters.AOP.Extensions
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class RemoveCachedAOPAttribute : AbstractInterceptorAttribute

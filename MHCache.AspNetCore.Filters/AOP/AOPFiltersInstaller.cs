@@ -7,7 +7,7 @@ using MHCache.AspNetCore.Filters.MVC.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MHCache.AspNetCore.Filters.MVC
+namespace MHCache.AspNetCore.Filters.AOP
 {
     public static class AOPFiltersInstaller
     {

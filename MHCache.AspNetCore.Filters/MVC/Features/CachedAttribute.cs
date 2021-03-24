@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace MHCache.AspNetCore.Filters.MVC.Extensions
+namespace MHCache.AspNetCore.Filters.AOP.Extensions
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class CachedAttribute : ActionFilterAttribute

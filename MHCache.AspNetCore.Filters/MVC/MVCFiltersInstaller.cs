@@ -1,10 +1,10 @@
-﻿using MHCache.AspNetCore.Filters.MVC.DataModel;
-using MHCache.AspNetCore.Filters.MVC.Extensions;
+﻿using MHCache.AspNetCore.Filters.AOP.DataModel;
+using MHCache.AspNetCore.Filters.AOP.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MHCache.AspNetCore.Filters.MVC
+namespace MHCache.AspNetCore.Filters.AOP
 {
     /// <summary>Realiza a instalação dos filtros no pipeline MVC</summary>
     public static class MVCFiltersInstaller

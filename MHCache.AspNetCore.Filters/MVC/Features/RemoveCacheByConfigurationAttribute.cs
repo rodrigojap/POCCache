@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MHCache.AspNetCore.Filters.MVC.DataModel;
+using MHCache.AspNetCore.Filters.AOP.DataModel;
 using MHCache.Extensions;
 using MHCache.Services;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 
-namespace MHCache.AspNetCore.Filters.MVC.Extensions
+namespace MHCache.AspNetCore.Filters.AOP.Extensions
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class RemoveCacheByConfigurationAttribute : ActionFilterAttribute

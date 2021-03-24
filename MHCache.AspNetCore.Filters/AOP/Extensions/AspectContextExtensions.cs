@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using AspectCore.DynamicProxy;
 
-namespace MHCache.AspNetCore.Filters.MVC.Extensions
+namespace MHCache.AspNetCore.Filters.AOP.Extensions
 {
     public static class AspectContextExtensions 
     {
