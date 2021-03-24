@@ -1,5 +1,5 @@
 using AspectCore.Extensions.DependencyInjection;
-using MHCache.AspNetCore.Filters.MVC;
+using MHCache.AspNetCore.Filters.AOP;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

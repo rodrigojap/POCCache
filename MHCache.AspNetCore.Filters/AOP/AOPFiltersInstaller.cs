@@ -2,10 +2,10 @@
 using System.Linq;
 using AspectCore.Configuration;
 using AspectCore.Extensions.DependencyInjection;
-using MHCache.AspNetCore.Filters.MVC.Extensions;
+using MHCache.AspNetCore.Filters.AOP.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MHCache.AspNetCore.Filters.MVC
+namespace MHCache.AspNetCore.Filters.AOP
 {
     public static class AOPFiltersInstaller
     {
