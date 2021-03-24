@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using MHCache.AspNetCore.Filters;
+using MHCache.AspNetCore.Filters.MVC;
 using Microsoft.AspNetCore.Mvc;
 using RedisTEST.Services;
 

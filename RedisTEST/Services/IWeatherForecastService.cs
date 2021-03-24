@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using MHCache.AspNetCore.Filters;
+using MHCache.AspNetCore.Filters.MVC.Extensions;
 
 namespace RedisTEST.Services
 {

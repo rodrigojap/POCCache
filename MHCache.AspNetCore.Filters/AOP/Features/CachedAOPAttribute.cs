@@ -6,7 +6,7 @@ using MHCache.Extensions;
 using MHCache.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MHCache.AspNetCore.Filters
+namespace MHCache.AspNetCore.Filters.MVC.Extensions
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class CachedAOPAttribute : AbstractInterceptorAttribute
@@ -25,11 +25,6 @@ namespace MHCache.AspNetCore.Filters
 
         public async override Task Invoke(AspectContext context, AspectDelegate next)
         {
-            if (string.IsNullOrWhiteSpace(CacheName)) 
-            {
-                CacheName = context.GetGenerateKeyByMethodNameAndValues();
-            }            
-
             var methodReturnType = context.ProxyMethod.ReturnType;
             if (
                     context.HasAttributeType(GetType()) ||
@@ -40,6 +35,11 @@ namespace MHCache.AspNetCore.Filters
             {
                 await next(context);
                 return;
+            }
+
+            if (string.IsNullOrWhiteSpace(CacheName))
+            {
+                CacheName = context.GetGenerateKeyByMethodNameAndValues();
             }
 
             ResponseCacheService = context.ServiceProvider.GetService<IResponseCacheService>();
