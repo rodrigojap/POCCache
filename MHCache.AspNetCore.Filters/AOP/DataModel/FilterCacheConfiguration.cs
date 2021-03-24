@@ -9,9 +9,9 @@ namespace MHCache.AspNetCore.Filters.AOP.DataModel
         public int? GeneralTimeToLiveSeconds { get; set; }
 
         /// <summary>Nome da controllers que serão executadas em cache</summary>
-        public IEnumerable<MethodCacheConfiguration> CachedRoutes { get; set; }
+        public IEnumerable<MethodCacheConfiguration> CachedMethods { get; set; }
         
         /// <summary>Nome de controllers que quando chamadas em Post/Put/Delete removerá o cache</summary>
-        public IEnumerable<MethodCacheRemoveConfiguration> CacheRemoveRoutes { get; set; }
+        public IEnumerable<MethodCacheRemoveConfiguration> CacheRemoveMethods { get; set; }
     }
 }

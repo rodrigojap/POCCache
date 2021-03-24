@@ -8,7 +8,7 @@ namespace RedisTEST.Services
         //[CachedAOP]
         Task<WeatherForecast[]> GetWeatherForecasts();
 
-        [CachedAOP]
+        //[CachedAOP]
         Task<WeatherForecast> GetWeatherForecastById(int id);
 
         //[CachedAOP]

@@ -18,17 +18,18 @@ namespace MHCache.AspNetCore.Filters.AOP
                                                                    )
         {
             services
+                .InstallMHRedisCache(configuration)
                 .GetConfigurationDataMHRedisCacheFilters(configuration)
                 .ConfigureDynamicProxy(config =>
                 {
                     config
                         .Interceptors
                         .AddTyped<CachedAOPByConfiguration>(
-                                                                        types.Select(o => Predicates.Implement(o)).ToArray()
-                                                                    )
+                                                               types.Select(o => Predicates.Implement(o)).ToArray()
+                                                           )
                         .AddTyped<RemoveCachedAOPByConfiguration>(
-                                                                              types.Select(o => Predicates.Implement(o)).ToArray()
-                                                                          );
+                                                                     types.Select(o => Predicates.Implement(o)).ToArray()
+                                                                 );
                     
                 });
 
@@ -38,6 +39,7 @@ namespace MHCache.AspNetCore.Filters.AOP
         public static IServiceCollection InstallRedisAOPCacheFilter(this IServiceCollection services, IConfiguration configuration)
         {
             services
+                .InstallMHRedisCache(configuration)
                 .GetConfigurationDataMHRedisCacheFilters(configuration)
                 .ConfigureDynamicProxy(config =>
                 {

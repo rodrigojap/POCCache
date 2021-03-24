@@ -8,11 +8,11 @@ namespace MHCache.AspNetCore.Filters.MVC.Extensions
     {
         public static MethodCacheConfiguration GetCacheConfigurationByMethodName(
                                                                    this AspectContext context,
-                                                                   FilterCacheConfiguration optionsConfig//IOptionsMonitor<FilterCacheConfiguration> optionsConfig
+                                                                   FilterCacheConfiguration optionsConfig
                                                                )
         {
             var fullMethodName = $"{context.ImplementationMethod.DeclaringType.FullName}.{context.ImplementationMethod.Name}";
-            return optionsConfig.CachedRoutes.First(config => fullMethodName.Contains(config.CachedMethodName));
+            return optionsConfig.CachedMethods?.FirstOrDefault(config => fullMethodName.Contains(config.CachedMethodName));
         }
 
         public static MethodCacheRemoveConfiguration GetCacheRemoveConfigurationByMethodName(
@@ -21,7 +21,7 @@ namespace MHCache.AspNetCore.Filters.MVC.Extensions
                                                                )
         {
             var fullMethodName = $"{context.ImplementationMethod.DeclaringType.FullName}.{context.ImplementationMethod.Name}";
-            return optionsConfig.CacheRemoveRoutes.First(config => fullMethodName.Contains(config.CachedMethodName));
+            return optionsConfig.CacheRemoveMethods?.FirstOrDefault(config => fullMethodName.Contains(config.CachedMethodName));
         }
     }
 }

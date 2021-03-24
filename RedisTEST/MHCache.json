@@ -54,16 +54,16 @@
       ],
       "CachedMethods": [
         {
-          "CachedMethodName": "WeatherForecast",
+          "CachedMethodName": "GetWeatherForecastById",
           "TimeToLiveSeconds": 60
         }
       ],
-      "CacheRemoveMethods": [
-        {
-          "CachedMethodName": "WeatherForecast",
-          "PatternMethodCachedName": "*WeatherForecast*"
-        }
-      ]
+      //"CacheRemoveMethods": [
+      //  {
+      //    "CachedMethodName": "GetWeatherForecastById",
+      //    "PatternMethodCachedName": "*WeatherForecast*"
+      //  }
+      //]
     }
   }
 }
