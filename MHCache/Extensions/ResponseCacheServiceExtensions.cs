@@ -16,7 +16,7 @@ namespace MHCache.Extensions
         /// <param name="cacheKey">Nome da chave de cache</param>
         /// <param name="objectValue">O valor do objeto a ser inserido na cache</param>
         /// <param name="timeTimeLive">Tempo de expiração do objeto</param>
-        public static Task SetCacheResponseAsync<TValue>(
+        public static Task<bool> SetCacheResponseAsync<TValue>(
                                                     this IResponseCacheService cacheService,
                                                     string cacheKey,
                                                     TValue objectValue,
@@ -37,7 +37,7 @@ namespace MHCache.Extensions
         /// <param name="cacheService">Serviço de cache</param>
         /// <param name="objectValue">O valor do objeto a ser inserido na cache</param>
         /// <param name="timeTimeLive">Tempo de expiração do objeto</param>
-        public static Task SetCacheResponseAsync<TValue>(
+        public static Task<bool> SetCacheResponseAsync<TValue>(
                                                     this IResponseCacheService cacheService, 
                                                     TValue objectValue, 
                                                     TimeSpan? timeTimeLive
@@ -99,6 +99,16 @@ namespace MHCache.Extensions
                                                         int pageSize = 250,
                                                         int pageOffset = 0
                                                     )
-            => cacheService.GetKeysByPattern("*", pageSize, pageOffset);               
+            => cacheService.GetKeysByPattern("*", pageSize, pageOffset);
+
+
+        /// <summary>Remove todas as chaves no redis</summary>
+        /// <param name="cacheService">Serviço de cache</param>
+        /// <param name="pattern">Padrão de nome das chaves a serem removidas</param>
+        public static Task<long> RemoveAllByPatternAsync(this IResponseCacheService cacheService, string pattern)
+        {
+            var keys = cacheService.GetKeysByPattern(pattern, int.MaxValue);
+            return cacheService.RemoveCachedResponseByNamesAsync(keys.ToArray());
+        }
     }
 }

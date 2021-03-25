@@ -65,22 +65,9 @@ namespace MHCache.Features
 
         /// <summary>Remove um item de cache a partir no nome indicado</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
-        public Task<bool> RemoveCachedResponseByNameAsync(string cacheKey) 
+        public Task<long> RemoveCachedResponseByNamesAsync(params string[] cacheKeys) 
         {
-            return _database.KeyDeleteAsync(new RedisKey(cacheKey));
-        }
-
-        /// <summary>
-        /// Remove todos os itens contidos no padrão
-        /// </summary>
-        /// <param name="pattern">Todos os iteque cont</param>
-        /// <returns></returns>
-        public Task<long> RemoveAllByPatternAsync(string pattern)
-        {
-            var keys = _server.Keys(pattern: pattern, pageSize: int.MaxValue, pageOffset: 0)
-                              .ToArray();                      
-
-            return _database.KeyDeleteAsync(keys);
+            return _database.KeyDeleteAsync(cacheKeys.Select(o => new RedisKey(o)).ToArray());
         }
     }
 }

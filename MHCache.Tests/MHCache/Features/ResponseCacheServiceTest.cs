@@ -85,6 +85,53 @@ namespace MHCache.Tests.MHCache.Features
 
             //Assert            
             Assert.True(comparisonValue);
-        }        
+        }
+
+
+
+        [InlineData("key1,key2,key3,_key1,_key2,_key3", "key1", "key1")]
+        [InlineData("key1,key2,key3,_key1,_key2,_key3", "*key2", "key2,_key2")]
+        [InlineData("key1,key2,key3,_key1,_key2,_key3", "key*", "key1,key2,key3")]
+        [InlineData("key1,key2,key3,_key1,_key2,_key3", "*key*", "key1,key2,key3,_key1,_key2,_key3")]
+        [Theory]
+        public async Task When_KeySearchPattern_Then_ReturnSearchedValues_Test(string keys, string pattern, string expectedFoundValues)
+        {
+            //Arrange            
+            string cacheValueToCreate = "valorTeste";
+            foreach (var item in keys.Split(",", StringSplitOptions.RemoveEmptyEntries))
+            {
+                await ResponseCacheService.SetCacheResponseAsync(item, cacheValueToCreate, null);
+            }            
+
+            //Act                        
+            var foundValues = ResponseCacheService.GetKeysByPattern(pattern);
+
+            //Assert            
+            Assert.Equal(expectedFoundValues, string.Join(",", foundValues));
+        }
+
+
+        [InlineData("key1,key2,key3,_key1,_key2,_key3", "key1", "key2,key3,_key1,_key2,_key3")]
+        [InlineData("key1,key2,key3,_key1,_key2,_key3", "key2,key3", "key1,_key1,_key2,_key3")]
+        [Theory]
+        public async Task When_Remove_Then_ReturnSearchedValues_Test(string keys, string strValues, string expectedFoundValues)
+        {
+            //Arrange            
+            string cacheValueToCreate = "valorTeste";
+            foreach (var item in keys.Split(",", StringSplitOptions.RemoveEmptyEntries))
+            {
+                await ResponseCacheService.SetCacheResponseAsync(item, cacheValueToCreate, null);
+            }
+            var removeParams = strValues.Split(",", StringSplitOptions.RemoveEmptyEntries);
+
+            //Act                        
+            var removedCount = await ResponseCacheService.RemoveCachedResponseByNamesAsync(removeParams);
+            var remainedKeys = ResponseCacheService.GetKeysByPattern("*key*");
+
+            //Assert    
+            Assert.Equal(removeParams.Length, removedCount);
+            Assert.Equal(expectedFoundValues, string.Join(",", remainedKeys));
+        }
+
     }
 }

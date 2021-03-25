@@ -23,7 +23,7 @@ namespace MHCache.AspNetCore.Filters.MVC.Extensions
             {
                 ResponseCacheService = context.ServiceProvider.GetService<IResponseCacheService>();
                 await ResponseCacheService
-                    .RemoveAllByPatternAsync(configCacheRemove.PatternMethodCachedName);
+                    .RemoveCachedResponseByNamesAsync(configCacheRemove.PatternMethodCachedName);
             }
 
             await next(context);            

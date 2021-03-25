@@ -27,15 +27,9 @@ namespace MHCache.Features
         /// <param name="pageOffset">Indice da página</param>
         IEnumerable<string> GetKeysByPattern(string pattern, int pageSize = 250, int pageOffset = 0);
 
-        /// <summary>Remove um item de cache a partir no nome indicado</summary>
+        /// <summary>Remove itens a partir das chaves indicadas e retorna o numero de itens removidos</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
-        Task<bool> RemoveCachedResponseByNameAsync(string cacheKey);
+        Task<long> RemoveCachedResponseByNamesAsync(params string[] cacheKeys);
 
-        /// <summary>
-        /// Remove todos os itens contidos no padrão
-        /// </summary>
-        /// <param name="pattern">Todos os iteque cont</param>
-        /// <returns></returns>
-        Task<long> RemoveAllByPatternAsync(string pattern);
     }
 }

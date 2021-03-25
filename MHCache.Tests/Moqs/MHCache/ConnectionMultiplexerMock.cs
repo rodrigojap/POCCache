@@ -49,6 +49,7 @@ namespace MHCache.Tests.Moqs.MHCache
             Set_KeyExistsAsync();
             Set_SetCacheResponseAsync();
             Set_GetCachedResponseAsStringAsync();
+            Set_KeyDeleteAsync();
         }
 
         #region Task<bool> KeyExistsAsync(RedisKey key, CommandFlags flags);
@@ -122,7 +123,7 @@ namespace MHCache.Tests.Moqs.MHCache
             {
                 resultValue = CachedValues.FirstOrDefault(o => o.Item1 == cachedKey);
             })
-            .ReturnsAsync(() => resultValue.Item2);
+            .ReturnsAsync(() => resultValue?.Item2);
         }
 
         public void Throw_GetCachedResponseAsStringAsync(Exception ex)
@@ -135,6 +136,33 @@ namespace MHCache.Tests.Moqs.MHCache
 
         #endregion
 
+        #region _database.KeyDeleteAsync(new RedisKey(cacheKey))
+        public void Set_KeyDeleteAsync() 
+        {
+            long result = 0;
+            Setup(d => d.KeyDeleteAsync(
+                                            It.IsAny<RedisKey[]>(),
+                                            It.IsAny<CommandFlags>()
+                                        )
+            )
+            .Callback<RedisKey[], CommandFlags>(
+            (keys, flags) => 
+            {
+                result = CachedValues.RemoveAll(o => keys.Contains( o.Item1) );
+            })
+            .ReturnsAsync(() => result);
+        }
+
+        public void Throw_KeyDeleteAsync(Exception ex) 
+        {
+            Setup(d => d.KeyDeleteAsync(
+                                            It.IsAny<RedisKey>(),
+                                            It.IsAny<CommandFlags>()
+                                        )
+            )
+            .ThrowsAsync(ex);
+        }
+        #endregion
     }
 
     public class ServerMock : Mock<IServer> 
@@ -148,7 +176,44 @@ namespace MHCache.Tests.Moqs.MHCache
         public ServerMock(List<Tuple<string, string, TimeSpan?>> cachedValues)
         {
             CachedValues = cachedValues;
+            Set_Keys();
         }
-        
+
+        #region _server.Keys(pattern: new RedisValue(pattern), pageSize: pageSize, pageOffset: pageOffset)
+
+        public void Set_Keys()
+        {
+            IEnumerable<RedisKey> result = null; 
+            Setup(d => d.Keys(It.IsAny<int>(), It.IsAny<RedisValue>(), It.IsAny<int>(), It.IsAny<long>(), It.IsAny<int>(), It.IsAny<CommandFlags>()))
+                .Callback<int, RedisValue, int, long, int, CommandFlags>(
+                (database, pattern, pageSize, cursor, pageOffset, flags) => 
+                {
+                    result = CachedValues
+                                .Where(o => FindValue(o.Item1, pattern))
+                                .Take(pageSize)
+                                .Skip(pageOffset)
+                                .Select(o => new RedisKey(o.Item1));
+                })
+                .Returns(() => result);
+        }
+
+        public void Throw_Keys(Exception ex)
+        {
+            IEnumerable<RedisKey> result = null;
+            Setup(d => d.Keys(It.IsAny<int>(), It.IsAny<RedisValue>(), It.IsAny<int>(), It.IsAny<CommandFlags>()))
+            .Throws(ex);
+        }
+
+        private static bool FindValue(string key, string pattern) 
+        {            
+            if (pattern.StartsWith("*") && pattern.EndsWith("*")) return key.Contains(pattern.Replace("*", ""));
+            if (pattern.StartsWith("*")) return key.EndsWith(pattern.Replace("*", ""));
+            if (pattern.EndsWith("*")) return key.StartsWith(pattern.Replace("*", ""));
+            return key == pattern.Replace("*", "");
+             
+
+        }
+
+        #endregion        
     }
 }

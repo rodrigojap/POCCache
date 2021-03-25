@@ -119,19 +119,22 @@ namespace MHCache.Tests.Moqs.MHCache
 
         public void Set_RemoveCachedResponseByNameAsync()
         {
-            Tuple<string, string, TimeSpan?> resultValue = null;
+            IEnumerable<string> foundKeys = null;
+            long result = 0;
 
             Setup(service =>
-                service.RemoveCachedResponseByNameAsync(It.IsAny<string>())
+                service.RemoveCachedResponseByNamesAsync(It.IsAny<string[]>())
             )
-            .Callback<string>((cachedKey) =>
+            .Callback<string[]>((cachedKeys) =>
             {
-                resultValue = CachedValues
-                                .FirstOrDefault(o => o.Item1 == cachedKey);
+                foundKeys = CachedValues
+                                .Where(o => cachedKeys.Contains(o.Item1))
+                                .Select(o => o.Item1)
+                                .ToArray();
 
-                CachedValues.Remove(resultValue);
+                result = CachedValues.RemoveAll(o => foundKeys.Contains(o.Item1));
             })
-            .ReturnsAsync(() => resultValue != null);
+            .ReturnsAsync(() => result);
         }
 
         public void Throw_RemoveCachedResponseByNameAsync(Exception ex)
@@ -144,34 +147,6 @@ namespace MHCache.Tests.Moqs.MHCache
 
         #endregion
 
-        #region Task<long> RemoveAllByPatternAsync(string pattern);
-
-        public void Set_RemoveAllByPatternAsync()
-        {
-            long resultValue = 0;
-
-            Setup(service =>
-                service.RemoveAllByPatternAsync(It.IsAny<string>())
-            )
-            .Callback<string>((cachedKey) =>
-            {
-                resultValue = CachedValues
-                                .Count(o => o.Item1.Contains(cachedKey));
-
-                CachedValues.RemoveAll(o => o.Item1.Contains(cachedKey));
-            })
-            .ReturnsAsync(() => resultValue);
-        }
-
-        public void Throw_RemoveAllByPatternAsync(Exception ex)
-        {
-            Setup(service =>
-                service.RemoveAllByPatternAsync(It.IsAny<string>())
-            )
-            .Throws(ex);
-        }
-
-
-        #endregion
+        
     }
 }
