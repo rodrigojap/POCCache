@@ -52,16 +52,39 @@ namespace MHCache.Tests.MHCache.Features
             //Assert
             Assert.Equal(expectedEx.Message, exResult.Message);
         }
+        
+        [Fact]
+        public async Task When_SetThrow_Then_ReturnThrow_Test()
+        {
+            //Arrange
+            var expectedEx = new Exception("Ocorreu um erro");
+            ConnectionMultiplexerMock.DataBaseMock.Throw_SetCacheResponseAsync(expectedEx);            
+            string cachedKey = "chaveTeste";            
 
+            //Act
+            var exResult = await Assert
+                            .ThrowsAsync<Exception>(
+                                () => ResponseCacheService.SetCacheResponseAsync(cachedKey, "valorTeste", null)
+                            );
 
-        // SetCache 
-        // 1 - Throw
+            //Assert
+            Assert.Equal(expectedEx.Message, exResult.Message);
+        }
+        
+        [Fact]
+        public async Task When_KeyCreated_Then_CompareAndReturnTrue_Test()
+        {
+            //Arrange            
+            string cacheKeyToCreate = "chaveTeste";
+            string cacheValueToCreate = "valorTeste";
+            await ResponseCacheService.SetCacheResponseAsync(cacheKeyToCreate, cacheValueToCreate, null);
 
-        // GetCache 
-        // 1 - Setar o cache e quando chamar o get o valor retornado deve ser igual ao setado
-        // 2 - Throw
+            //Act                        
+            string createdValue = await ResponseCacheService.GetCachedResponseAsStringAsync(cacheKeyToCreate);
+            var comparisonValue = createdValue.Equals(cacheValueToCreate, StringComparison.InvariantCultureIgnoreCase);
 
-
-
+            //Assert            
+            Assert.True(comparisonValue);
+        }        
     }
 }
