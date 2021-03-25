@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MHCache.Features;
 using MHCache.Tests.Moqs.MHCache;
 using Xunit;
@@ -17,16 +18,49 @@ namespace MHCache.Tests.MHCache.Features
             ResponseCacheService = new ResponseCacheService(ConnectionMultiplexerMock.Object);
         }
 
+        //When_<Cenario>_Then_<Result>_Test
+        //Should_<Result>_When_<Cenario>_Test
         [Fact]
         public async Task When_KeyCreatedAndAskExist_Then_ReturnTrue_Test() 
         {
+            //Arrange
             string cachedKey = "chaveTeste";
             await ResponseCacheService.SetCacheResponseAsync(cachedKey, "valorTeste", null);
-            Assert.True(await ResponseCacheService.ContainsKeyAsync(cachedKey));
+
+            //Act
+            var result = await ResponseCacheService.ContainsKeyAsync(cachedKey);
+
+            //Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task When_AskExistThrow_Then_ReturnThrow_Test()
+        {
+            //Arrange
+            var expectedEx = new Exception("Ocorreu um erro");
+            ConnectionMultiplexerMock.DataBaseMock.Throw_KeyExistsAsync(expectedEx);
+            string cachedKey = "chaveTeste";
+            await ResponseCacheService.SetCacheResponseAsync(cachedKey, "valorTeste", null);
+
+            //Act
+            var exResult = await Assert
+                            .ThrowsAsync<Exception>(
+                                () => ResponseCacheService.ContainsKeyAsync(cachedKey)
+                            );
+          
+            //Assert
+            Assert.Equal(expectedEx.Message, exResult.Message);
         }
 
 
-        
+        // SetCache 
+        // 1 - Throw
+
+        // GetCache 
+        // 1 - Setar o cache e quando chamar o get o valor retornado deve ser igual ao setado
+        // 2 - Throw
+
 
 
     }

@@ -66,9 +66,9 @@ namespace MHCache.Tests.Moqs.MHCache
         public void Throw_KeyExistsAsync(Exception ex)
         {
             Setup(service =>
-                service.KeyExistsAsync(It.IsAny<string>(), It.IsAny<CommandFlags>())
+                service.KeyExistsAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>())
             )
-            .Throws(ex);
+            .ThrowsAsync(ex);
         }
 
         #endregion
@@ -149,8 +149,6 @@ namespace MHCache.Tests.Moqs.MHCache
         {
             CachedValues = cachedValues;
         }
-
         
-
     }
 }
