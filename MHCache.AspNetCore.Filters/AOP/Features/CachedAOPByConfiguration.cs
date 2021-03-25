@@ -5,7 +5,7 @@ using AspectCore.DynamicProxy;
 using MHCache.AspNetCore.Filters.AOP.DataModel;
 using MHCache.AspNetCore.Filters.AOP.Extensions;
 using MHCache.Extensions;
-using MHCache.Services;
+using MHCache.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 

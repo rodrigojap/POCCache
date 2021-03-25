@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MHCache.Services
+namespace MHCache.Features
 {
     /// <summary>Interface para tratamento de cache no serviço</summary>
     public interface IResponseCacheService
     {
         /// <summary>Indica se a chave indicada existe no redis</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
-        Task<bool> ContainsKey(string cacheKey);
+        Task<bool> ContainsKeyAsync(string cacheKey);
 
         /// <summary>Seta um texto em cache no serviço e retorna caso realizado com sucesso</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
         /// <param name="value">Valor em texto a ser cacheado</param>
-        /// <param name="timeTimeLive">Tempo de expiração da cache</param>
-        Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan? timeTimeLive);
+        /// <param name="timeLive">Tempo de expiração da cache</param>
+        Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan? timeLive);
 
         /// <summary>Obtém a informação de uma cache como texto a partir da chave</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
@@ -29,13 +29,13 @@ namespace MHCache.Services
 
         /// <summary>Remove um item de cache a partir no nome indicado</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
-        Task<bool> RemoveCachedResponseAsync(string cacheKey);
+        Task<bool> RemoveCachedResponseByNameAsync(string cacheKey);
 
         /// <summary>
         /// Remove todos os itens contidos no padrão
         /// </summary>
         /// <param name="pattern">Todos os iteque cont</param>
         /// <returns></returns>
-        Task<long> RemoveAllByPattern(string pattern);
+        Task<long> RemoveAllByPatternAsync(string pattern);
     }
 }

@@ -1,4 +1,4 @@
-﻿using MHCache.Services;
+﻿using MHCache.Features;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

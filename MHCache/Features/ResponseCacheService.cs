@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
-namespace MHCache.Services
+namespace MHCache.Features
 {
     /// <summary>Classe de tratamento de cache no serviço</summary>
     public class ResponseCacheService : IResponseCacheService
@@ -16,13 +16,13 @@ namespace MHCache.Services
         { 
             _database = connectionMultiplexer.GetDatabase();
 
-            var endpoint = connectionMultiplexer.GetEndPoints()[0];
+            var endpoint = connectionMultiplexer.GetEndPoints().FirstOrDefault();
             _server = connectionMultiplexer.GetServer(endpoint);
         }
 
         /// <summary>Indica se a chave indicada existe no redis</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
-        public Task<bool> ContainsKey(string cacheKey)
+        public Task<bool> ContainsKeyAsync(string cacheKey)
         {
             return _database.KeyExistsAsync(new RedisKey(cacheKey));
         }
@@ -30,13 +30,13 @@ namespace MHCache.Services
         /// <summary>Seta um texto em cache no serviço e retorna caso realizado com sucesso</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
         /// <param name="value">Valor em texto a ser cacheado</param>
-        /// <param name="timeTimeLive">Tempo de expiração da cache</param>
-        public Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan? timeTimeLive)
+        /// <param name="timeLive">Tempo de expiração da cache</param>
+        public Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan? timeLive)
         {            
             return _database.StringSetAsync(
                                               new RedisKey(cacheKey),
                                               value,
-                                              timeTimeLive
+                                              timeLive
                                           );
         }
 
@@ -65,7 +65,7 @@ namespace MHCache.Services
 
         /// <summary>Remove um item de cache a partir no nome indicado</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
-        public Task<bool> RemoveCachedResponseAsync(string cacheKey) 
+        public Task<bool> RemoveCachedResponseByNameAsync(string cacheKey) 
         {
             return _database.KeyDeleteAsync(new RedisKey(cacheKey));
         }
@@ -75,7 +75,7 @@ namespace MHCache.Services
         /// </summary>
         /// <param name="pattern">Todos os iteque cont</param>
         /// <returns></returns>
-        public Task<long> RemoveAllByPattern(string pattern)
+        public Task<long> RemoveAllByPatternAsync(string pattern)
         {
             var keys = _server.Keys(pattern: pattern, pageSize: int.MaxValue, pageOffset: 0)
                               .ToArray();                      

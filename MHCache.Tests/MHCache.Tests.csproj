@@ -22,6 +22,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="MHCache.AspNetCore.Filters\AOP\Extensions\" />
+    <Folder Include="MHCache.AspNetCore.Filters\AOP\Features\" />
+    <Folder Include="MHCache.AspNetCore.Filters\MVC\Features\" />
+    <Folder Include="MHCache\Extensions\" />
+    <Folder Include="Moqs\MHCache.AspNetCore.Filters\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MHCache\MHCache.csproj" />
   </ItemGroup>
 

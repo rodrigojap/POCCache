@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspectCore.DynamicProxy;
 using MHCache.Extensions;
-using MHCache.Services;
+using MHCache.Features;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MHCache.AspNetCore.Filters.AOP.Extensions
@@ -31,7 +31,7 @@ namespace MHCache.AspNetCore.Filters.AOP.Extensions
 
             ResponseCacheService = context.ServiceProvider.GetService<IResponseCacheService>();
             await ResponseCacheService
-                    .RemoveAllByPattern(RemovePattern);
+                    .RemoveAllByPatternAsync(RemovePattern);
             
         }
     }

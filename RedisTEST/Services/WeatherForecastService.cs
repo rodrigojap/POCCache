@@ -1,5 +1,5 @@
 ﻿using MHCache.Extensions;
-using MHCache.Services;
+using MHCache.Features;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,7 +27,7 @@ namespace RedisTEST.Services
             //await repository.UpdateUser(userId);
 
             //REMOVE CACHE
-            await _responseCacheService.RemoveAllByPattern($"{userId}:*");
+            await _responseCacheService.RemoveAllByPatternAsync($"{userId}:*");
 
             return true;
         }

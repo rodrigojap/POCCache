@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AspectCore.DynamicProxy;
 using MHCache.AspNetCore.Filters.AOP.DataModel;
-using MHCache.Services;
+using MHCache.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -23,7 +23,7 @@ namespace MHCache.AspNetCore.Filters.MVC.Extensions
             {
                 ResponseCacheService = context.ServiceProvider.GetService<IResponseCacheService>();
                 await ResponseCacheService
-                    .RemoveAllByPattern(configCacheRemove.PatternMethodCachedName);
+                    .RemoveAllByPatternAsync(configCacheRemove.PatternMethodCachedName);
             }
 
             await next(context);            

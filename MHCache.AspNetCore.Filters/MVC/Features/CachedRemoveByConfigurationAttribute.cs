@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MHCache.AspNetCore.Filters.MVC.DataModel;
 using MHCache.Extensions;
-using MHCache.Services;
+using MHCache.Features;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 
@@ -47,7 +47,7 @@ namespace MHCache.AspNetCore.Filters.AOP.Extensions
             if (isAllowedMethod && removeRouteCache != null)
             {
                 var qq = ResponseCacheService.GetAllKeys();
-                await ResponseCacheService.RemoveAllByPattern(removeRouteCache.PatternRouteName);
+                await ResponseCacheService.RemoveAllByPatternAsync(removeRouteCache.PatternRouteName);
                 var q = ResponseCacheService.GetAllKeys();
             }
         }                
