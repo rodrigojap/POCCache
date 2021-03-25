@@ -72,7 +72,7 @@ namespace MHCache.Tests.MHCache.Features
         }
         
         [Fact]
-        public async Task When_KeyCreated_Then_CompareAndReturnTrue_Test()
+        public async Task When_KeyAndValueCreated_Then_CompareValueAndReturnTrue_Test()
         {
             //Arrange            
             string cacheKeyToCreate = "chaveTeste";
