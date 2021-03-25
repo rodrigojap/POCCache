@@ -70,7 +70,31 @@ namespace MHCache.Tests.MHCache.Features
             //Assert
             Assert.Equal(expectedEx.Message, exResult.Message);
         }
-        
+
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [Theory]
+        public async Task When_SetCacheResponseAsyncSendNullOrWhiteSpaceValue_Then_NotPersist_Test(string value)
+        {
+            string cacheKeyToCreate = "chaveTeste";
+            Assert.False(await ResponseCacheService.SetCacheResponseAsync(cacheKeyToCreate, value, null));
+        }
+
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [Theory]
+        public async Task When_SetCacheResponseAsyncSendNullOrWhiteSpaceKey_Then_ThrowError_Test(string key)
+        {
+            var ex = await Assert
+                .ThrowsAsync<Exception>(
+                    () => ResponseCacheService.SetCacheResponseAsync(key, "TEste", null)
+                );
+
+            Assert.Equal("Não pode ser criado um item com chave nula o string vazia.", ex.Message);
+        }
+
         [Fact]
         public async Task When_KeyAndValueCreated_Then_CompareValueAndReturnTrue_Test()
         {

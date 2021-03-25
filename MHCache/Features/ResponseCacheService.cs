@@ -32,7 +32,17 @@ namespace MHCache.Features
         /// <param name="value">Valor em texto a ser cacheado</param>
         /// <param name="timeLive">Tempo de expiração da cache</param>
         public Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan? timeLive)
-        {            
+        {
+            if (string.IsNullOrWhiteSpace(value)) 
+            {
+                return Task.FromResult(false);
+            }
+
+            if (string.IsNullOrWhiteSpace(cacheKey)) 
+            {
+                throw new Exception("Não pode ser criado um item com chave nula o string vazia.");
+            }
+
             return _database.StringSetAsync(
                                               new RedisKey(cacheKey),
                                               value,
@@ -43,7 +53,12 @@ namespace MHCache.Features
         /// <summary>Obtém a informação de uma cache como texto a partir da chave</summary>
         /// <param name="cacheKey">Nome da chave de cache</param>
         public async Task<string> GetCachedResponseAsStringAsync(string cacheKey)
-        {            
+        {
+            if (string.IsNullOrWhiteSpace(cacheKey))
+            {
+                return null;
+            }
+
             string cachedResponse = await _database.StringGetAsync(
                                               new RedisKey(cacheKey)
                                           );

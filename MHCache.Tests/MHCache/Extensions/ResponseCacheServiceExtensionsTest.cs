@@ -134,7 +134,6 @@ namespace MHCache.Tests.MHCache.Extensions
         }
 
 
-
     }
 
     public class ClasseTeste 
