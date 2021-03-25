@@ -7,17 +7,17 @@ using Microsoft.Extensions.Options;
 
 namespace MHCache.AspNetCore.Filters.MVC.Extensions
 {
-    public class RemoveCachedAOPByConfiguration : AbstractInterceptorAttribute
+    public class CachedRemoveAOPByConfiguration : AbstractInterceptorAttribute
     {
         private IResponseCacheService ResponseCacheService { get; set; }
 
-        public RemoveCachedAOPByConfiguration()
+        public CachedRemoveAOPByConfiguration()
         {
         }
 
         public async override Task Invoke(AspectContext context, AspectDelegate next)
         {
-            var cachedRemoveConfigurationProvider = context.ServiceProvider.GetService<IOptionsMonitor<FilterCacheConfiguration>>();
+            var cachedRemoveConfigurationProvider = context.ServiceProvider.GetService<IOptionsMonitor<FilterCachedConfiguration>>();
             var configCacheRemove = context.GetCacheRemoveConfigurationByMethodName(cachedRemoveConfigurationProvider.CurrentValue);
             if (configCacheRemove != null)
             {

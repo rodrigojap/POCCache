@@ -1,9 +1,9 @@
 ﻿namespace MHCache.AspNetCore.Filters.MVC.DataModel
 {
-    public class RouteCacheConfiguration
+    public class RouteCachedRemoveConfiguration
     {
         public string CachedRouteName { get; set; }
 
-        public int? TimeToLiveSeconds { get; set; }
+        public string PatternRouteName { get; set; }
     }
 }

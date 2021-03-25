@@ -27,7 +27,7 @@ namespace MHCache.AspNetCore.Filters.AOP
                         .AddTyped<CachedAOPByConfiguration>(
                                                                types.Select(o => Predicates.Implement(o)).ToArray()
                                                            )
-                        .AddTyped<RemoveCachedAOPByConfiguration>(
+                        .AddTyped<CachedRemoveAOPByConfiguration>(
                                                                      types.Select(o => Predicates.Implement(o)).ToArray()
                                                                  );
                     
@@ -46,7 +46,7 @@ namespace MHCache.AspNetCore.Filters.AOP
                     config
                         .Interceptors
                         .AddTyped<CachedAOPByConfiguration>()
-                        .AddTyped<RemoveCachedAOPByConfiguration>();
+                        .AddTyped<CachedRemoveAOPByConfiguration>();
                 });
 
             return services;
@@ -55,7 +55,7 @@ namespace MHCache.AspNetCore.Filters.AOP
         private static IServiceCollection GetConfigurationDataMHRedisCacheFilters(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddOptions<FilterCacheConfiguration>()
+                .AddOptions<FilterCachedConfiguration>()
                 .Configure(options => {
                     configuration.GetSection("MHCache:FilterCacheConfiguration").Bind(options);
                 });

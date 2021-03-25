@@ -6,18 +6,18 @@ namespace MHCache.AspNetCore.Filters.MVC.Extensions
 {
     public static class AspectContextByConfigurationExtensions
     {
-        public static MethodCacheConfiguration GetCacheConfigurationByMethodName(
+        public static MethodCachedConfiguration GetCacheConfigurationByMethodName(
                                                                    this AspectContext context,
-                                                                   FilterCacheConfiguration optionsConfig
+                                                                   FilterCachedConfiguration optionsConfig
                                                                )
         {
             var fullMethodName = $"{context.ImplementationMethod.DeclaringType.FullName}.{context.ImplementationMethod.Name}";
             return optionsConfig.CachedMethods?.FirstOrDefault(config => fullMethodName.Contains(config.CachedMethodName));
         }
 
-        public static MethodCacheRemoveConfiguration GetCacheRemoveConfigurationByMethodName(
+        public static MethodCachedRemoveConfiguration GetCacheRemoveConfigurationByMethodName(
                                                                    this AspectContext context,
-                                                                   FilterCacheConfiguration optionsConfig
+                                                                   FilterCachedConfiguration optionsConfig
                                                                )
         {
             var fullMethodName = $"{context.ImplementationMethod.DeclaringType.FullName}.{context.ImplementationMethod.Name}";
