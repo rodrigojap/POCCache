@@ -1,6 +1,6 @@
 ﻿namespace MHCache.AspNetCore.Filters.AOP.DataModel
 {
-    public class MethodCacheRemoveConfiguration
+    public class MethodCachedRemoveConfiguration
     {
         public string CachedMethodName { get; set; }
 

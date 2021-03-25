@@ -20,13 +20,13 @@ namespace MHCache.AspNetCore.Filters.AOP.Extensions
         private const string AllowedRequestMethod = "GET";
 
         private readonly int _timeToLiveSeconds;        
-        private readonly IEnumerable<RouteCacheConfiguration> _cachedRoutes;
+        private readonly IEnumerable<RouteCachedConfiguration> _cachedRoutes;
 
         public IResponseCacheService ResponseCacheService { get; }
 
         public CachedByConfigurationAttribute(
                                 IResponseCacheService responseCacheService,
-                                IOptionsMonitor<FilterCacheConfiguration> configuration,
+                                IOptionsMonitor<FilterCachedConfiguration> configuration,
                                 int timeToLiveSeconds = TimeToLiveForThreeDays
                               )
         {

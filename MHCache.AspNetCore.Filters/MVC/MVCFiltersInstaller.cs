@@ -17,7 +17,7 @@ namespace MHCache.AspNetCore.Filters.AOP
         private static IServiceCollection GetConfigurationDataMHRedisCacheFilters(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddOptions<FilterCacheConfiguration>()
+                .AddOptions<FilterCachedConfiguration>()
                 .Configure(options => {
                     configuration.GetSection("MHCache:FilterCacheConfiguration").Bind(options);
                 });
@@ -37,7 +37,7 @@ namespace MHCache.AspNetCore.Filters.AOP
         /// <param name="options">Opções do mvc para setar os filtros</param>
         public static MvcOptions InstallMHRedisCacheRemoveFilter(this MvcOptions options)
         {
-            options.Filters.Add<RemoveCacheByConfigurationAttribute>();
+            options.Filters.Add<CachedRemoveByConfigurationAttribute>();
             return options;
         }
     }

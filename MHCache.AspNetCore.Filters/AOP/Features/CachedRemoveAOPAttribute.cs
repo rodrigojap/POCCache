@@ -9,13 +9,13 @@ using Microsoft.Extensions.DependencyInjection;
 namespace MHCache.AspNetCore.Filters.AOP.Extensions
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class RemoveCachedAOPAttribute : AbstractInterceptorAttribute
+    public class CachedRemoveAOPAttribute : AbstractInterceptorAttribute
     {
         public string RemovePattern { get; set; }
 
         private IResponseCacheService ResponseCacheService { get; set; }
 
-        public RemoveCachedAOPAttribute()
+        public CachedRemoveAOPAttribute()
         {
         }
 

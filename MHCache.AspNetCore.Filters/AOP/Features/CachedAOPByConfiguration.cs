@@ -27,7 +27,7 @@ namespace MHCache.AspNetCore.Filters.MVC.Extensions
 
         public async override Task Invoke(AspectContext context, AspectDelegate next)
         {
-            var cachedConfigurationProvider = context.ServiceProvider.GetService<IOptionsMonitor<FilterCacheConfiguration>>();
+            var cachedConfigurationProvider = context.ServiceProvider.GetService<IOptionsMonitor<FilterCachedConfiguration>>();
             var configCache = context.GetCacheConfigurationByMethodName(cachedConfigurationProvider.CurrentValue);
             
             var methodReturnType = context.ProxyMethod.ReturnType;

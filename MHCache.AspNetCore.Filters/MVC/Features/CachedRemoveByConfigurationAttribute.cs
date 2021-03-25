@@ -11,17 +11,17 @@ using Microsoft.Extensions.Options;
 namespace MHCache.AspNetCore.Filters.AOP.Extensions
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class RemoveCacheByConfigurationAttribute : ActionFilterAttribute
+    public class CachedRemoveByConfigurationAttribute : ActionFilterAttribute
     {
         private static readonly string[] AllowedRequestMethod = { "POST", "PUT", "PATCH", "DELETE" };
        
-        private readonly IEnumerable<RouteCacheRemoveConfiguration> _removeCacheRoutes;
+        private readonly IEnumerable<RouteCachedRemoveConfiguration> _removeCacheRoutes;
 
         public IResponseCacheService ResponseCacheService { get; }
 
-        public RemoveCacheByConfigurationAttribute(
+        public CachedRemoveByConfigurationAttribute(
                                 IResponseCacheService responseCacheService,
-                                IOptionsMonitor<FilterCacheConfiguration> configuration
+                                IOptionsMonitor<FilterCachedConfiguration> configuration
                               )
         {
             var configValues = configuration.CurrentValue;
