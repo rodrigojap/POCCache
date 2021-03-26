@@ -12,17 +12,27 @@ namespace MHCache.Tests.Moqs.MHCache
         #region Properties
 
         private List<Tuple<string, string, TimeSpan?>> CachedValues { get; set; } = new List<Tuple<string, string, TimeSpan?>>();
-        
+
         #endregion
+
+        public ResponseCacheServiceMock()
+        {
+            Set_ContainsKey();
+            Set_SetCacheResponseAsync();
+            Set_GetCachedResponseAsStringAsync();
+            Set_GetKeysByPattern();
+        }
 
         #region Task<bool> ContainsKeyAsync(string cacheKey);
 
-        public void Set_ContainsKey(bool result)
+        public void Set_ContainsKey()
         {
+            bool result = false;
             Setup(service => 
                 service.ContainsKeyAsync(It.IsAny<string>())
             )
-            .ReturnsAsync(result);
+            .Callback<string>(key => result = CachedValues.Any(x => x.Item1 == key))
+            .ReturnsAsync(() => result);
         }
         
         public void Throw_ContainsKey(Exception ex)
@@ -37,7 +47,13 @@ namespace MHCache.Tests.Moqs.MHCache
 
         #region Task<bool> SetCacheResponseAsync(string cacheKey, string value, TimeSpan? timeLive);
 
-        public void Set_SetCacheResponseAsync(bool result)
+        public void Verify_SetCacheResponseAsync(Times times)
+        {
+            Verify(service =>
+                    service.SetCacheResponseAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<TimeSpan?>()), times);
+        }
+
+        public void Set_SetCacheResponseAsync()
         {
             Setup(service => 
                 service.SetCacheResponseAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<TimeSpan?>())            
@@ -46,7 +62,7 @@ namespace MHCache.Tests.Moqs.MHCache
                 (cacheKey, value, timeLive) 
                     => CachedValues.Add( new Tuple<string, string, TimeSpan?>(cacheKey, value, timeLive))
             )
-            .ReturnsAsync(result);
+            .ReturnsAsync(true);
         }
 
         public void Throw_SetCacheResponseAsync(Exception ex)
@@ -61,6 +77,15 @@ namespace MHCache.Tests.Moqs.MHCache
 
         #region Task<string> GetCachedResponseAsStringAsync(string cacheKey);
 
+        public void Verify_GetCachedResponseAsStringAsync(Times times) 
+        {
+            Verify(
+                service =>
+                    service.GetCachedResponseAsStringAsync(It.IsAny<string>()), 
+                times
+            );
+        }
+
         public void Set_GetCachedResponseAsStringAsync()
         {
             Tuple<string, string, TimeSpan?> resultValue = null;
@@ -73,7 +98,7 @@ namespace MHCache.Tests.Moqs.MHCache
 
                 resultValue = CachedValues.FirstOrDefault(o => o.Item1 == cachedKey);
             })
-            .ReturnsAsync(() => resultValue.Item2);
+            .ReturnsAsync(() => resultValue?.Item2);
         }
 
         public void Throw_GetCachedResponseAsStringAsync(Exception ex)

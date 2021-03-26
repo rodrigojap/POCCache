@@ -40,13 +40,15 @@
 
     "FilterCacheConfiguration": {
       "GeneralTimeToLiveSeconds": 259200, //"int?",
+      "RegisterCachedByOnlyTypeNames": [ "RedisTEST.Services.IWeatherForecastService, RedisTEST" ],
+      "RegisterCachedRemoveByOnlyTypeNames": [ "RedisTEST.Services.IWeatherForecastService, RedisTEST" ],
       "CachedRoutes": [
         {
           "CachedRouteName": "WeatherForecast",
           "TimeToLiveSeconds": 60
         }
       ],
-      "CacheRemoveRoutes": [
+      "CachedRemoveRoutes": [
         {
           "CachedRouteName": "WeatherForecast",
           "PatternRouteName": "*WeatherForecast*"
@@ -54,11 +56,11 @@
       ],
       "CachedMethods": [
         {
-          "CachedMethodName": "GetWeatherForecastById",
+          "CachedMethodName": "GetWeather1ForecastById",
           "TimeToLiveSeconds": 60
         }
-      ],
-      //"CacheRemoveMethods": [
+      ]
+      //"CachedRemoveMethods": [
       //  {
       //    "CachedMethodName": "GetWeatherForecastById",
       //    "PatternMethodCachedName": "*WeatherForecast*"

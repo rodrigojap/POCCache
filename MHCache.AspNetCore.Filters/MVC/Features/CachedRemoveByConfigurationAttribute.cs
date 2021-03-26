@@ -25,7 +25,7 @@ namespace MHCache.AspNetCore.Filters.AOP.Extensions
                               )
         {
             var configValues = configuration.CurrentValue;
-            _removeCacheRoutes = configValues.CacheRemoveRoutes;
+            _removeCacheRoutes = configValues.CachedRemoveRoutes;
             ResponseCacheService = responseCacheService;            
         }
 

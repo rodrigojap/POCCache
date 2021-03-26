@@ -12,6 +12,6 @@ namespace MHCache.AspNetCore.Filters.MVC.DataModel
         public IEnumerable<RouteCachedConfiguration> CachedRoutes { get; set; }
         
         /// <summary>Nome de controllers que quando chamadas em Post/Put/Delete removerá o cache</summary>
-        public IEnumerable<RouteCachedRemoveConfiguration> CacheRemoveRoutes { get; set; }
+        public IEnumerable<RouteCachedRemoveConfiguration> CachedRemoveRoutes { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace MHCache.AspNetCore.Filters.MVC.Extensions
                                                                )
         {
             var fullMethodName = $"{context.ImplementationMethod.DeclaringType.FullName}.{context.ImplementationMethod.Name}";
-            return optionsConfig.CacheRemoveMethods?.FirstOrDefault(config => fullMethodName.Contains(config.CachedMethodName));
+            return optionsConfig.CachedRemoveMethods?.FirstOrDefault(config => fullMethodName.Contains(config.CachedMethodName));
         }
     }
 }

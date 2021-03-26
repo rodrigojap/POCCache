@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="Moq.AutoMock" Version="2.3.0" />
@@ -24,11 +25,11 @@
   <ItemGroup>
     <Folder Include="MHCache.AspNetCore.Filters\AOP\Extensions\" />
     <Folder Include="MHCache.AspNetCore.Filters\AOP\Features\" />
-    <Folder Include="MHCache.AspNetCore.Filters\MVC\Features\" />
     <Folder Include="Moqs\MHCache.AspNetCore.Filters\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MHCache.AspNetCore.Filters\MHCache.AspNetCore.Filters.csproj" />
     <ProjectReference Include="..\MHCache\MHCache.csproj" />
   </ItemGroup>
 
