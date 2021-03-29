@@ -100,7 +100,7 @@ namespace MHCache.Tests.MHCache.Extensions
             //Arrange
             foreach (var item in keys.Split(",", StringSplitOptions.RemoveEmptyEntries))
             {
-                await ResponseCacheService.SetCacheResponseAsync(item, "", null);
+                await ResponseCacheService.SetCacheResponseAsync(item, "teste", null);
             }
 
             //Act
@@ -108,7 +108,7 @@ namespace MHCache.Tests.MHCache.Extensions
 
 
             //Assert
-            Assert.True(expectedValue.Equals(string.Join(",",result)));
+            Assert.Equal(expectedValue,string.Join(",",result));
         }
 
 
@@ -122,7 +122,7 @@ namespace MHCache.Tests.MHCache.Extensions
             //Arrange
             foreach (var item in keys.Split(",", StringSplitOptions.RemoveEmptyEntries))
             {
-                await ResponseCacheService.SetCacheResponseAsync(item, "", null);
+                await ResponseCacheService.SetCacheResponseAsync(item, "teste", null);
             }
 
             //Act

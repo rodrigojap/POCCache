@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 
-namespace MHCache.AspNetCore.Filters.AOP.Extensions
+namespace MHCache.AspNetCore.Filters.MVC.Extensions
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class CachedByConfigurationAttribute : ActionFilterAttribute

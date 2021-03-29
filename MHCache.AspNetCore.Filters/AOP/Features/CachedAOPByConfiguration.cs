@@ -9,7 +9,7 @@ using MHCache.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace MHCache.AspNetCore.Filters.MVC.Extensions
+namespace MHCache.AspNetCore.Filters.AOP.Extensions
 {
     public class CachedAOPByConfiguration : AbstractInterceptorAttribute
     {

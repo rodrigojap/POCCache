@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using MHCache.AspNetCore.Filters.MVC.DataModel;
 using MHCache.AspNetCore.Filters.MVC.Extensions;
 using MHCache.Tests.Moqs.MHCache;
 using Microsoft.AspNetCore.Http;
@@ -9,18 +10,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
 namespace MHCache.Tests.MHCache.AspNetCore.Filters.MVC.Features
 {
-    public class CacheAttributeTest
+    public class CachedByConfigurationAttributeTest
     {
         #region Properties
 
         private ResponseCacheServiceMock ResponseCacheServiceMock { get; }
 
-        private CachedAttribute CachedAttribute { get; set; }
+        private CachedByConfigurationAttribute CachedByConfigurationAttribute { get; set; }
 
         public ActionExecutingContext Context { get; set; }
         
@@ -29,10 +31,14 @@ namespace MHCache.Tests.MHCache.AspNetCore.Filters.MVC.Features
         private Mock<ActionExecutionDelegate> ActionExecutionDelegateMock { get; set; }
 
 
+        private Mock<IOptionsMonitor<FilterCachedConfiguration>> Configuration { get; set; }
+
         #endregion
 
-        public CacheAttributeTest()
+        public CachedByConfigurationAttributeTest()
         {
+            Configuration = new Mock<IOptionsMonitor<FilterCachedConfiguration>>();
+            
             HttpContext = new DefaultHttpContext();
             Context = new ActionExecutingContext(
                 new ActionContext(HttpContext, new RouteData(), new ActionDescriptor()),
@@ -41,8 +47,7 @@ namespace MHCache.Tests.MHCache.AspNetCore.Filters.MVC.Features
                 new Mock<ControllerBase>().Object);
 
             ResponseCacheServiceMock = new ResponseCacheServiceMock();
-            CachedAttribute = new CachedAttribute(ResponseCacheServiceMock.Object);
-
+            
             ActionExecutionDelegateMock = new Mock<ActionExecutionDelegate>();
             
         }
@@ -64,10 +69,25 @@ namespace MHCache.Tests.MHCache.AspNetCore.Filters.MVC.Features
             return string.Join("|", httpContext.Request.Query.OrderBy(x => x.Key).Select(o => $"{o.Key}-{o.Value}"));
         }
 
+        private FilterCachedConfiguration GetConfiguration(IEnumerable<string> routesName)
+            => new FilterCachedConfiguration()
+               {
+                   GeneralTimeToLiveSeconds = 60,
+                   CachedRoutes = routesName.Select(routeName => new RouteCachedConfiguration { CachedRouteName = routeName, TimeToLiveSeconds = 10 })
+               };
+
         [InlineData("GET", "/Default", "?teste=1")]
         [Theory]
         public async Task When_FilterCalledWithoutCached_Then_SetObjectCached_Test(string method, string path, string queryString ) 
         {
+            Configuration
+                .SetupGet(d => d.CurrentValue).Returns(GetConfiguration("Default".Split(",")));
+
+            CachedByConfigurationAttribute = new CachedByConfigurationAttribute(
+                                                                                    ResponseCacheServiceMock.Object,
+                                                                                    Configuration.Object
+                                                                               );
+
             var expectedValue = new { prop1 = "teste" };
             ActionExecutionDelegateMock
                 .Setup(d => d.Invoke())
@@ -80,7 +100,7 @@ namespace MHCache.Tests.MHCache.AspNetCore.Filters.MVC.Features
             HttpContext.Request.QueryString = new QueryString(queryString);
 
             //Act
-            await CachedAttribute.OnActionExecutionAsync(Context, ActionExecutionDelegateMock.Object);
+            await CachedByConfigurationAttribute.OnActionExecutionAsync(Context, ActionExecutionDelegateMock.Object);
             
             ResponseCacheServiceMock.Verify_GetCachedResponseAsStringAsync( Times.Once());
             ResponseCacheServiceMock.Verify_SetCacheResponseAsync(Times.Once());
@@ -93,6 +113,13 @@ namespace MHCache.Tests.MHCache.AspNetCore.Filters.MVC.Features
         [Theory]
         public async Task When_FilterCalledWithCached_Then_GetObjectCached_Test(string method, string path, string queryString)
         {
+            Configuration
+                .SetupGet(d => d.CurrentValue).Returns(GetConfiguration("Default".Split(",")));
+
+            CachedByConfigurationAttribute = new CachedByConfigurationAttribute(
+                                                                                    ResponseCacheServiceMock.Object,
+                                                                                    Configuration.Object
+                                                                               );
             var expectedValue = new { prop1 = "teste" };
             ActionExecutionDelegateMock
                 .Setup(d => d.Invoke())
@@ -107,7 +134,7 @@ namespace MHCache.Tests.MHCache.AspNetCore.Filters.MVC.Features
             await ResponseCacheServiceMock.Object.SetCacheResponseAsync($"{path}|{BuildValuesFromQueryString(HttpContext)}", JsonSerializer.Serialize(expectedValue), null);
 
             //Act
-            await CachedAttribute.OnActionExecutionAsync(Context, ActionExecutionDelegateMock.Object);
+            await CachedByConfigurationAttribute.OnActionExecutionAsync(Context, ActionExecutionDelegateMock.Object);
 
             ResponseCacheServiceMock.Verify_GetCachedResponseAsStringAsync(Times.Once());
 

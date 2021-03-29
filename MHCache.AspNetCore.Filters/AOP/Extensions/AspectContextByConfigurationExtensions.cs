@@ -2,7 +2,7 @@
 using AspectCore.DynamicProxy;
 using MHCache.AspNetCore.Filters.AOP.DataModel;
 
-namespace MHCache.AspNetCore.Filters.MVC.Extensions
+namespace MHCache.AspNetCore.Filters.AOP.Extensions
 {
     public static class AspectContextByConfigurationExtensions
     {

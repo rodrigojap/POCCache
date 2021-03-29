@@ -8,7 +8,7 @@ using MHCache.Features;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 
-namespace MHCache.AspNetCore.Filters.AOP.Extensions
+namespace MHCache.AspNetCore.Filters.MVC.Extensions
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class CachedRemoveByConfigurationAttribute : ActionFilterAttribute

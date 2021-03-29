@@ -4,7 +4,7 @@ using System.Linq;
 using AspectCore.Configuration;
 using AspectCore.Extensions.DependencyInjection;
 using MHCache.AspNetCore.Filters.AOP.DataModel;
-using MHCache.AspNetCore.Filters.MVC.Extensions;
+using MHCache.AspNetCore.Filters.AOP.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
