@@ -23,9 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="MHCache.AspNetCore.Filters\AOP\Extensions\" />
     <Folder Include="MHCache.AspNetCore.Filters\AOP\Features\" />
-    <Folder Include="Moqs\MHCache.AspNetCore.Filters\" />
   </ItemGroup>
 
   <ItemGroup>

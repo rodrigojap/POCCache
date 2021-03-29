@@ -108,6 +108,36 @@ namespace MHCache.Tests.MHCache.AspNetCore.Filters.MVC.Features
             Assert.Equal(JsonSerializer.Serialize(expectedValue), storedValue);
         }
 
+        [InlineData("GET", "/Default", "?teste=1")]
+        [Theory]
+        public async Task When_FilterCalledWithoutCached2_Then_SetObjectCached_Test(string method, string path, string queryString)
+        {
+            Configuration
+                .SetupGet(d => d.CurrentValue).Returns(GetConfiguration("Default".Split(",")));
+
+            CachedByConfigurationAttribute = new CachedByConfigurationAttribute(
+                                                                                    ResponseCacheServiceMock.Object,
+                                                                                    Configuration.Object
+                                                                               );
+
+            object expectedValue = null;
+            ActionExecutionDelegateMock
+                .Setup(d => d.Invoke())
+                .ReturnsAsync(
+                    SetActionExecutedContext(expectedValue)
+                );
+
+            HttpContext.Request.Method = method;
+            HttpContext.Request.Path = path;
+            HttpContext.Request.QueryString = new QueryString(queryString);
+
+            //Act
+            await CachedByConfigurationAttribute.OnActionExecutionAsync(Context, ActionExecutionDelegateMock.Object);
+
+            ResponseCacheServiceMock.Verify_GetCachedResponseAsStringAsync(Times.Once());
+            ResponseCacheServiceMock.Verify_SetCacheResponseAsync(Times.Never());
+        }
+
 
         [InlineData("GET", "/Default", "?teste=1")]
         [Theory]
@@ -141,7 +171,38 @@ namespace MHCache.Tests.MHCache.AspNetCore.Filters.MVC.Features
             ResponseCacheServiceMock.Verify_SetCacheResponseAsync(Times.Once());
         }
 
+        [InlineData("POST", "/Default")]
+        [InlineData("PUT", "/Default/1")]
+        [InlineData("DELETE", "/Default/1")]
+        [InlineData("PATCH", "/Default/1")]
+        [InlineData("GET", "/TESTE")]
+        [Theory]
+        public async Task When_FilterCalledAndNotGetMethod_Then_NotProcess_Test(string method, string path)
+        {
+            Configuration
+                .SetupGet(d => d.CurrentValue).Returns(GetConfiguration("Default".Split(",")));
 
+            CachedByConfigurationAttribute = new CachedByConfigurationAttribute(
+                                                                                    ResponseCacheServiceMock.Object,
+                                                                                    Configuration.Object
+                                                                               );
+            var expectedValue = new { prop1 = "teste" };
+            ActionExecutionDelegateMock
+                .Setup(d => d.Invoke())
+                .ReturnsAsync(
+                    SetActionExecutedContext(expectedValue)
+                );
+
+            HttpContext.Request.Method = method;
+            HttpContext.Request.Path = path;
+
+            //Act
+            await CachedByConfigurationAttribute.OnActionExecutionAsync(Context, ActionExecutionDelegateMock.Object);
+
+            ResponseCacheServiceMock.Verify_GetCachedResponseAsStringAsync(Times.Never());
+
+            ResponseCacheServiceMock.Verify_SetCacheResponseAsync(Times.Never());
+        }
 
     }
 }

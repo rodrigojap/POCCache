@@ -113,6 +113,20 @@ namespace MHCache.Tests.Moqs.MHCache
 
         #region IEnumerable<string> GetKeysByPattern(string pattern, int pageSize = 250, int pageOffset = 0);
 
+        public void Verify_GetKeysByPattern(Times times, string pattern) 
+        {
+            Verify(
+                    service =>
+                        service
+                            .GetKeysByPattern( 
+                                It.Is<string>(p => p == pattern),
+                                It.IsAny<int>(),
+                                It.IsAny<int>()
+                            ),
+                    times
+                );
+        }
+
         public void Set_GetKeysByPattern()
         {
             IEnumerable<string> resultValue = null;
@@ -141,6 +155,15 @@ namespace MHCache.Tests.Moqs.MHCache
         #endregion
 
         #region Task<bool> RemoveCachedResponseByNameAsync(string cacheKey);
+
+        public void Set_RemoveCachedResponseByNameAsync(Times times)
+        {
+            Verify(
+                service =>
+                    service.RemoveCachedResponseByNamesAsync(It.IsAny<string[]>()),
+                times
+            );
+        }
 
         public void Set_RemoveCachedResponseByNameAsync()
         {

@@ -46,9 +46,7 @@ namespace MHCache.AspNetCore.Filters.MVC.Extensions
 
             if (isAllowedMethod && removeRouteCache != null)
             {
-                var qq = ResponseCacheService.GetAllKeys();
                 await ResponseCacheService.RemoveAllByPatternAsync(removeRouteCache.PatternRouteName);
-                var q = ResponseCacheService.GetAllKeys();
             }
         }                
     }

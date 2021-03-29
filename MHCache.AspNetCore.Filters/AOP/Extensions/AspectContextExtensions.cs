@@ -11,13 +11,13 @@ namespace MHCache.AspNetCore.Filters.AOP.Extensions
         public static string GetGenerateKeyByMethodNameAndValues(this AspectContext context)
         {            
             var parameters = context.ProxyMethod
-                .GetParameters()
+                .GetParameters()?
                 .Select((o,index) => 
                 new
                 {
                     o.Name,
                     Value = context.Parameters[index]
-                });
+                }).ToArray();
 
             return JsonSerializer
                 .Serialize(

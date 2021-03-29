@@ -12,7 +12,15 @@ namespace MHCache.AspNetCore.Filters.AOP.Extensions
                                                                )
         {
             var fullMethodName = $"{context.ImplementationMethod.DeclaringType.FullName}.{context.ImplementationMethod.Name}";
-            return optionsConfig.CachedMethods?.FirstOrDefault(config => fullMethodName.Contains(config.CachedMethodName));
+            return optionsConfig
+                    .CachedMethods?
+                    .FirstOrDefault(
+                            config => fullMethodName
+                                        .Contains(
+                                            config.CachedMethodName, 
+                                            System.StringComparison.InvariantCultureIgnoreCase
+                                        )
+                    );
         }
 
         public static MethodCachedRemoveConfiguration GetCacheRemoveConfigurationByMethodName(
@@ -21,7 +29,15 @@ namespace MHCache.AspNetCore.Filters.AOP.Extensions
                                                                )
         {
             var fullMethodName = $"{context.ImplementationMethod.DeclaringType.FullName}.{context.ImplementationMethod.Name}";
-            return optionsConfig.CachedRemoveMethods?.FirstOrDefault(config => fullMethodName.Contains(config.CachedMethodName));
+            return optionsConfig
+                    .CachedRemoveMethods?
+                    .FirstOrDefault(
+                            config => fullMethodName
+                                        .Contains(
+                                            config.CachedMethodName,
+                                            System.StringComparison.InvariantCultureIgnoreCase
+                                        )
+                    );
         }
     }
 }
